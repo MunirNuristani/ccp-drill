@@ -1,0 +1,3051 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cloud Practitioner Drill</title>
+<meta name="description" content="Practice quiz app for the AWS Certified Cloud Practitioner (CLF-C02) exam, with a full exam simulation and quick practice rounds.">
+<meta name="theme-color" content="#12151b" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f3f1ea" media="(prefers-color-scheme: light)">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CCP Drill">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#f3f1ea;
+    --surface:#ffffff;
+    --surface-2:#eae5d8;
+    --text:#1b1e24;
+    --text-dim:#5d6270;
+    --border:#ddd6c4;
+    --accent:#c2660a;
+    --accent-ink:#fffaf2;
+    --accent-soft:#f3ddc0;
+    --good:#146b52;
+    --good-bg:#e0f1e8;
+    --good-border:#bfe0cd;
+    --bad:#a92b21;
+    --bad-bg:#fbe8e5;
+    --bad-border:#f0c6bf;
+    --shadow: 0 20px 50px -25px rgba(30,20,0,0.35);
+    --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12151b;
+      --surface:#1b1f27;
+      --surface-2:#242a34;
+      --text:#eae7de;
+      --text-dim:#98a0ad;
+      --border:#2c313d;
+      --accent:#f0a234;
+      --accent-ink:#1c1400;
+      --accent-soft:#3a2a10;
+      --good:#3fcf9e;
+      --good-bg:#123028;
+      --good-border:#1e4a3d;
+      --bad:#ff7166;
+      --bad-bg:#3a1613;
+      --bad-border:#5a231d;
+      --shadow: 0 20px 50px -25px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12151b;
+    --surface:#1b1f27;
+    --surface-2:#242a34;
+    --text:#eae7de;
+    --text-dim:#98a0ad;
+    --border:#2c313d;
+    --accent:#f0a234;
+    --accent-ink:#1c1400;
+    --accent-soft:#3a2a10;
+    --good:#3fcf9e;
+    --good-bg:#123028;
+    --good-border:#1e4a3d;
+    --bad:#ff7166;
+    --bad-bg:#3a1613;
+    --bad-border:#5a231d;
+    --shadow: 0 20px 50px -25px rgba(0,0,0,0.6);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:24px 12px 48px;
+  }
+  .mono{font-family:"IBM Plex Mono", ui-monospace, monospace;}
+  #app{
+    width:100%;
+    max-width:430px;
+    display:flex;
+    flex-direction:column;
+    min-height:calc(100vh - 72px);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    position:relative;
+  }
+  header.topbar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 18px 14px;
+    border-bottom:1px solid var(--border);
+    background:var(--surface);
+    position:sticky;
+    top:0;
+    z-index:5;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:"IBM Plex Mono", monospace;
+    font-weight:600;
+    font-size:0.95rem;
+    letter-spacing:0.01em;
+  }
+  .brand .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+  .backbtn{
+    border:none;background:transparent;color:var(--text-dim);
+    font-family:"IBM Plex Mono",monospace;font-size:0.85rem;
+    cursor:pointer;padding:6px 8px;margin-left:-8px;border-radius:8px;
+    display:flex;align-items:center;gap:4px;
+  }
+  .backbtn:hover{background:var(--surface-2);color:var(--text);}
+  main{flex:1;display:flex;flex-direction:column;padding:20px 18px 100px;gap:18px;}
+  .screen{display:flex;flex-direction:column;gap:18px;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion: reduce){ .screen{animation:none;} }
+
+  h1{font-size:1.5rem;line-height:1.2;margin:0 0 4px;letter-spacing:-0.01em;text-wrap:balance;}
+  h2{font-size:1.05rem;margin:0;letter-spacing:-0.01em;}
+  p{margin:0;color:var(--text-dim);font-size:0.92rem;line-height:1.5;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--accent);
+    font-weight:600;
+  }
+
+  .factrow{display:flex;gap:8px;}
+  .fact{
+    flex:1;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:12px;padding:10px 8px;text-align:center;
+  }
+  .fact .num{font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:1.15rem;display:block;font-variant-numeric:tabular-nums;}
+  .fact .lbl{font-size:0.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;}
+
+  .card{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .domaingrid{display:flex;flex-direction:column;gap:10px;}
+  .domainrow{
+    display:flex;align-items:center;gap:12px;
+    background:var(--surface-2);border:1px solid var(--border);
+    border-radius:14px;padding:12px 14px;cursor:pointer;
+    text-align:left;width:100%;font-family:inherit;color:inherit;
+    transition:border-color .15s ease, transform .1s ease;
+  }
+  .domainrow:hover{border-color:var(--accent);}
+  .domainrow:active{transform:scale(0.99);}
+  .ring{
+    width:44px;height:44px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:conic-gradient(var(--accent) calc(var(--pct,0)*1%), var(--border) 0);
+  }
+  .ring::after{
+    content:attr(data-pct)"%";
+    width:34px;height:34px;border-radius:50%;background:var(--surface);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"IBM Plex Mono",monospace;font-size:0.62rem;font-weight:600;
+    font-variant-numeric:tabular-nums;
+  }
+  .domaininfo{flex:1;min-width:0;}
+  .domaininfo .name{font-weight:600;font-size:0.92rem;}
+  .domaininfo .meta{font-size:0.75rem;color:var(--text-dim);font-family:"IBM Plex Mono",monospace;}
+  .chev{color:var(--text-dim);font-size:1.1rem;}
+
+  .primarybtn{
+    background:var(--accent);color:var(--accent-ink);border:none;
+    border-radius:14px;padding:15px 18px;font-size:0.95rem;font-weight:600;
+    font-family:"IBM Plex Sans",sans-serif;cursor:pointer;width:100%;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:filter .15s ease, transform .1s ease;
+  }
+  .primarybtn:hover{filter:brightness(1.06);}
+  .primarybtn:active{transform:scale(0.98);}
+  .primarybtn:disabled{opacity:0.4;cursor:not-allowed;}
+  .ghostbtn{
+    background:transparent;color:var(--text);border:1px solid var(--border);
+    border-radius:14px;padding:13px 18px;font-size:0.88rem;font-weight:500;
+    font-family:"IBM Plex Sans",sans-serif;cursor:pointer;width:100%;
+  }
+  .ghostbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .linkbtn{
+    background:none;border:none;color:var(--text-dim);text-decoration:underline;
+    text-underline-offset:3px;font-size:0.8rem;cursor:pointer;font-family:inherit;
+    padding:4px;align-self:center;
+  }
+
+  /* Quiz screen */
+  .progresswrap{display:flex;flex-direction:column;gap:6px;}
+  .progressmeta{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:var(--text-dim);}
+  .progressbar{height:6px;border-radius:4px;background:var(--surface-2);overflow:hidden;}
+  .progressbar>div{height:100%;background:var(--accent);border-radius:4px;transition:width .3s ease;}
+  .chip{
+    align-self:flex-start;
+    font-family:"IBM Plex Mono",monospace;font-size:0.68rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:0.06em;
+    background:var(--accent-soft);color:var(--accent);
+    padding:5px 10px;border-radius:20px;
+  }
+  .qtext{font-size:1.12rem;line-height:1.45;font-weight:500;text-wrap:balance;}
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{
+    display:flex;flex-direction:column;gap:8px;
+    background:var(--surface);border:1.5px solid var(--border);
+    border-radius:14px;padding:13px 14px;cursor:pointer;text-align:left;
+    font-family:inherit;color:inherit;transition:border-color .15s ease, background .15s ease;
+  }
+  .option:hover:not(.locked){border-color:var(--accent);}
+  .option .row{display:flex;align-items:flex-start;gap:10px;}
+  .option .letter{
+    font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:0.78rem;
+    width:24px;height:24px;border-radius:7px;background:var(--surface-2);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+  }
+  .option .otext{font-size:0.9rem;line-height:1.4;padding-top:2px;}
+  .option.correct{background:var(--good-bg);border-color:var(--good-border);}
+  .option.correct .letter{background:var(--good);color:var(--good-bg);}
+  .option.incorrect{background:var(--bad-bg);border-color:var(--bad-border);}
+  .option.incorrect .letter{background:var(--bad);color:var(--bad-bg);}
+  .option.locked{cursor:default;}
+  .explain{
+    font-size:0.82rem;line-height:1.5;color:var(--text-dim);
+    border-top:1px dashed var(--border);padding-top:8px;margin-top:2px;
+    display:none;
+  }
+  .option.locked .explain{display:block;}
+  .option.correct .explain{color:var(--good);}
+  .option.incorrect .explain{color:var(--bad);}
+
+  .footerbar{
+    position:sticky;bottom:0;left:0;right:0;
+    background:linear-gradient(to top, var(--surface) 60%, transparent);
+    padding:18px 18px 20px;margin-top:-30px;
+  }
+
+  /* Results */
+  .scorehero{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    padding:18px 0 6px;text-align:center;
+  }
+  .scorebig{font-family:"IBM Plex Mono",monospace;font-size:3rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.02em;}
+  .scoreverdict{
+    font-family:"IBM Plex Mono",monospace;font-size:0.75rem;text-transform:uppercase;
+    letter-spacing:0.1em;font-weight:700;padding:4px 12px;border-radius:20px;
+  }
+  .scoreverdict.pass{background:var(--good-bg);color:var(--good);}
+  .scoreverdict.fail{background:var(--bad-bg);color:var(--bad);}
+  .breakdownrow{display:flex;flex-direction:column;gap:4px;}
+  .breakdownrow .toplbl{display:flex;justify-content:space-between;font-size:0.82rem;}
+  .breakdownrow .track{height:8px;border-radius:4px;background:var(--surface);overflow:hidden;}
+  .breakdownrow .fill{height:100%;border-radius:4px;background:var(--accent);}
+  .missedlist{display:flex;flex-direction:column;gap:8px;}
+  .missedcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;}
+  .missedcard .mq{font-size:0.85rem;font-weight:500;margin-bottom:6px;}
+  .missedcard .ma{font-size:0.78rem;color:var(--good);}
+  .examreviewtag{
+    font-family:"IBM Plex Mono",monospace;font-size:0.65rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:10px;
+    display:inline-block;margin-bottom:6px;
+  }
+  .examreviewtag.tagcorrect{background:var(--good-bg);color:var(--good);}
+  .examreviewtag.tagwrong{background:var(--bad-bg);color:var(--bad);}
+  .mywrong{font-size:0.78rem;color:var(--bad);margin-bottom:2px;}
+  .attemptno{font-family:"IBM Plex Mono",monospace;font-size:0.75rem;color:var(--text-dim);}
+
+  .modecard{display:flex;flex-direction:column;gap:12px;}
+  .modehead{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .modehead h2{display:flex;align-items:center;gap:8px;}
+  .modeicon{
+    width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+    background:var(--accent-soft);color:var(--accent);font-size:0.9rem;flex-shrink:0;
+  }
+  .examstats{display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px dashed var(--border);}
+  .examstatsrow{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-dim);}
+  .examstatsrow .good{color:var(--good);}
+  .examstatsrow .bad{color:var(--bad);}
+  .attemptdots{display:flex;gap:5px;margin-top:2px;flex-wrap:wrap;}
+  .attemptdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .attemptdot.dotpass{background:var(--good);}
+  .attemptdot.dotfail{background:var(--bad);}
+  .lenlabel{font-size:0.78rem;color:var(--text-dim);}
+  .lenchiprow{display:flex;gap:8px;}
+  .lenchip{
+    flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;
+    padding:9px 0;font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:0.85rem;
+    cursor:pointer;color:var(--text-dim);
+  }
+  .lenchip:hover{border-color:var(--accent);}
+  .lenchip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
+  .option.selected{border-color:var(--accent);background:var(--accent-soft);}
+  .option.selected .letter{background:var(--accent);color:var(--accent-ink);}
+
+  ::selection{background:var(--accent-soft);}
+  a{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header class="topbar">
+    <button class="backbtn" id="backBtn" style="display:none;" aria-label="Back to home">&larr; <span>Home</span></button>
+    <div class="brand"><span class="dot"></span><span id="brandLabel">CCP DRILL</span></div>
+  </header>
+  <main id="main"></main>
+</div>
+
+<script>
+const QUESTIONS = [
+// ---------------- CLOUD CONCEPTS ----------------
+{domain:"concepts", q:"What is one of the main financial benefits AWS describes for moving to the cloud?", options:[
+"Trading capital expense (upfront hardware purchases) for variable, pay-as-you-go expense",
+"Eliminating the need for any IT staff whatsoever",
+"A guarantee of zero ongoing operating costs",
+"A requirement to purchase servers in bulk before deployment"
+], exp:[
+"Correct — instead of buying data centers and servers up front, you pay only for the compute and storage you actually consume.",
+"Wrong — cloud reduces undifferentiated heavy lifting, but teams still need staff to design, secure, and operate workloads.",
+"Wrong — you still pay for what you use; the benefit is variable cost, not free infrastructure.",
+"Wrong — this describes the on-premises capital-expense model the cloud is meant to replace."
+]},
+{domain:"concepts", q:"Which Well-Architected Framework pillar focuses on running workloads effectively, gaining insight into operations, and continuously improving supporting processes?", options:[
+"Operational Excellence",
+"Security",
+"Cost Optimization",
+"Performance Efficiency"
+], exp:[
+"Correct — Operational Excellence covers automating changes, responding to events, and refining procedures over time.",
+"Wrong — Security is about protecting information, systems, and assets through risk assessments and mitigation.",
+"Wrong — Cost Optimization is about avoiding unnecessary costs and understanding spend over time.",
+"Wrong — Performance Efficiency is about using computing resources efficiently and adapting as demand and technology change."
+]},
+{domain:"concepts", q:"What is an AWS Availability Zone (AZ)?", options:[
+"One or more discrete data centers with redundant power, networking, and connectivity, located within an AWS Region",
+"A single physical server rack",
+"An entire country where AWS has a presence",
+"A single data center with no backup power or redundancy"
+], exp:[
+"Correct — each Region is made up of multiple isolated, redundant AZs so failures in one don't take down the others.",
+"Wrong — an AZ is made up of one or more full data centers, not a single rack.",
+"Wrong — a Region is a geographic area; an AZ is a smaller unit inside that Region.",
+"Wrong — AZs are specifically built with redundant power and networking for high availability."
+]},
+{domain:"concepts", q:"Which term describes the ability of a cloud environment to automatically acquire or release resources to match demand?", options:[
+"Elasticity",
+"Durability",
+"Consistency",
+"Idempotency"
+], exp:[
+"Correct — elasticity is the ability to scale compute, storage, or other resources up or down automatically as demand changes.",
+"Wrong — durability refers to how reliably data is preserved over time (used to describe services like S3), not scaling.",
+"Wrong — consistency describes whether reads reflect the latest writes in a data store.",
+"Wrong — idempotency means an operation produces the same result no matter how many times it's performed; unrelated to scaling."
+]},
+{domain:"concepts", q:"A company moves an application to AWS with almost no code changes, simply relaunching it on EC2 instances. Which migration strategy does this describe?", options:[
+"Rehost (\"lift and shift\")",
+"Refactor / re-architect",
+"Repurchase",
+"Retire"
+], exp:[
+"Correct — rehosting moves an application as-is onto cloud infrastructure with minimal modification.",
+"Wrong — refactoring means redesigning the application to take advantage of cloud-native features, which requires code changes.",
+"Wrong — repurchasing means switching to a different product, typically a SaaS offering, not moving the same app.",
+"Wrong — retiring means decommissioning an application that is no longer needed, not migrating it."
+]},
+{domain:"concepts", q:"What is a key advantage of AWS's multiple geographic Regions?", options:[
+"Applications can be deployed closer to end users to reduce latency and meet data residency needs",
+"All data transfer between Regions is automatically free",
+"Regions automatically convert billing currency for local customers",
+"Choosing a Region removes the customer's part of the shared responsibility model",
+], exp:[
+"Correct — running workloads in a Region near your users reduces latency, and Regions also help satisfy data sovereignty requirements.",
+"Wrong — inter-Region data transfer is generally a billed cost, not free.",
+"Wrong — Regions don't handle currency conversion; billing currency is a separate account setting.",
+"Wrong — the shared responsibility model applies regardless of which Region you choose."
+]},
+{domain:"concepts", q:"What does \"economies of scale\" mean in AWS's cost model?", options:[
+"As AWS's aggregate usage grows, it can operate more efficiently and pass savings on to customers through lower prices",
+"Every customer is charged an identical flat monthly fee",
+"Customers must build their own large data centers to get discounts",
+"Only enterprise customers are eligible for any form of discount",
+], exp:[
+"Correct — AWS has historically lowered prices multiple times as its infrastructure and customer base have grown.",
+"Wrong — pricing is usage-based, not a flat fee for everyone.",
+"Wrong — the entire point of economies of scale is that customers don't need their own data centers.",
+"Wrong — discounts such as Savings Plans, volume pricing, and Free Tier are available to accounts of many sizes."
+]},
+{domain:"concepts", q:"A startup wants to stop guessing infrastructure capacity months in advance. Which cloud characteristic solves this problem?", options:[
+"The ability to scale resources up or down on demand instead of forecasting and over-provisioning hardware",
+"A fixed, unchangeable allocation of servers",
+"A mandatory multi-year hardware purchase contract",
+"Vendor lock-in to a single instance type",
+], exp:[
+"Correct — cloud resources can be provisioned or released in minutes, removing the need to guess future capacity.",
+"Wrong — a fixed allocation is exactly the on-premises problem the cloud helps avoid.",
+"Wrong — AWS has no such requirement; usage is generally on-demand.",
+"Wrong — AWS offers many instance types and services, and workloads are not locked to one option."
+]},
+{domain:"concepts", q:"Which deployment model involves keeping some infrastructure on-premises while connecting it to resources running in AWS?", options:[
+"Hybrid deployment",
+"Fully cloud-native deployment",
+"On-premises-only deployment",
+"Air-gapped deployment",
+], exp:[
+"Correct — a hybrid deployment integrates on-premises infrastructure (or a private cloud) with AWS, often using services like Direct Connect or VPN.",
+"Wrong — a fully cloud-native deployment runs entirely in AWS with nothing kept on-premises.",
+"Wrong — an on-premises-only model uses no public cloud resources at all.",
+"Wrong — air-gapped describes a network with no external connectivity, not a hybrid AWS setup."
+]},
+{domain:"concepts", q:"What is an AWS edge location primarily used for?", options:[
+"Caching content close to end users to reduce latency, for services such as Amazon CloudFront",
+"Running the full compute capacity of an entire AWS Region",
+"Hosting discounted, unmanaged EC2 instances",
+"Storing IAM credentials for an account",
+], exp:[
+"Correct — edge locations are sites CloudFront (and other services) use to cache and deliver content closer to users.",
+"Wrong — a Region's compute capacity runs in its data centers/AZs, not at edge locations.",
+"Wrong — edge locations are content delivery endpoints, not EC2 compute infrastructure.",
+"Wrong — IAM credentials are managed centrally by AWS IAM, not stored at edge locations."
+]},
+{domain:"concepts", q:"Which statement best describes \"agility\" as a cloud computing benefit?", options:[
+"The ability to quickly provision, experiment with, and de-provision resources as business needs change",
+"The physical distance in miles between two AWS Regions",
+"A specific EC2 pricing discount tier",
+"A compliance certification AWS holds",
+], exp:[
+"Correct — agility means teams can access new resources in minutes instead of waiting weeks for hardware, enabling faster experimentation.",
+"Wrong — distance between Regions is a network/latency concept, unrelated to agility as a benefit.",
+"Wrong — pricing tiers like Reserved Instances relate to cost optimization, not agility.",
+"Wrong — compliance certifications are documented via AWS Artifact and are a separate topic from agility."
+]},
+{domain:"concepts", q:"During a migration, a company decides an old internal tool is no longer needed and shuts it down instead of moving it. Which of the \"6 R's\" migration strategies is this?", options:[
+"Retire",
+"Retain",
+"Rehost",
+"Repurchase",
+], exp:[
+"Correct — retiring means decommissioning applications identified as no longer useful.",
+"Wrong — retain means keeping an application on-premises for now, e.g. revisiting it later, not shutting it down.",
+"Wrong — rehost means moving the application to the cloud with minimal change, not decommissioning it.",
+"Wrong — repurchase means replacing the application with a different product, typically a SaaS solution."
+]},
+{domain:"concepts", q:"Which Well-Architected pillar focuses on using computing resources efficiently to meet requirements, and maintaining that efficiency as demand and technology evolve?", options:[
+"Performance Efficiency",
+"Reliability",
+"Security",
+"Cost Optimization",
+], exp:[
+"Correct — Performance Efficiency covers selecting the right resource types and sizes and adapting as needs change.",
+"Wrong — Reliability is about a workload recovering from failures and consistently meeting demand.",
+"Wrong — Security is about protecting data, systems, and assets.",
+"Wrong — Cost Optimization is about avoiding unneeded costs, a related but distinct concern from performance."
+]},
+{domain:"concepts", q:"Which of the following is NOT one of AWS's six commonly cited advantages of cloud computing?", options:[
+"A guarantee of zero downtime for any workload",
+"Increasing speed and agility",
+"No longer needing to run and maintain your own data centers",
+"Going global in minutes",
+], exp:[
+"Correct — AWS never claims zero downtime; high availability requires the customer to design for resiliency using multiple AZs/Regions.",
+"Wrong — increasing speed and agility is one of the six advantages AWS lists.",
+"Wrong — removing the burden of running data centers is one of the six advantages AWS lists.",
+"Wrong — going global in minutes by deploying in multiple Regions is one of the six advantages AWS lists."
+]},
+{domain:"concepts", q:"Which statement about AWS Regions is correct?", options:[
+"Each Region is a separate geographic area that contains multiple isolated Availability Zones",
+"A Region always contains exactly one data center",
+"All AWS Regions share a single electrical grid and network",
+"Customers cannot choose which Region their resources run in",
+], exp:[
+"Correct — Regions are geographically distinct, and each is composed of multiple AZs for isolation and redundancy.",
+"Wrong — a Region typically contains multiple AZs, each with one or more data centers.",
+"Wrong — Regions and AZs are intentionally isolated from each other's power and networking to prevent cascading failures.",
+"Wrong — customers explicitly choose the Region(s) they deploy resources into."
+]},
+{domain:"concepts", q:"How does Auto Scaling relate to the concept of elasticity?", options:[
+"It automatically adds or removes compute capacity to maintain performance while controlling cost",
+"It permanently fixes the number of running EC2 instances",
+"It encrypts data stored on EBS volumes",
+"It manages IAM user permissions",
+], exp:[
+"Correct — Auto Scaling adjusts capacity in response to demand, which is a practical implementation of elasticity.",
+"Wrong — Auto Scaling does the opposite of fixing capacity; it changes the instance count dynamically.",
+"Wrong — encryption is handled by services like AWS KMS or EBS encryption settings, not Auto Scaling.",
+"Wrong — IAM permissions are managed through AWS IAM, unrelated to Auto Scaling."
+]},
+{domain:"concepts", q:"What does \"refactoring\" (re-architecting) typically involve during a cloud migration?", options:[
+"Changing an application's architecture and code to take advantage of cloud-native features",
+"Moving an application to the cloud with no code changes at all",
+"Replacing the application entirely with a third-party SaaS product",
+"Shutting the application down permanently",
+], exp:[
+"Correct — refactoring modifies the application, often to use managed or serverless services, to gain cloud-native benefits.",
+"Wrong — that describes rehosting, not refactoring.",
+"Wrong — that describes repurchasing, a different one of the 6 R's.",
+"Wrong — that describes retiring, not refactoring."
+]},
+
+// ---------------- SECURITY AND COMPLIANCE ----------------
+{domain:"security", q:"Under the AWS Shared Responsibility Model, who is responsible for patching the hypervisor that underlies EC2?", options:[
+"AWS",
+"The customer",
+"A third-party auditor",
+"Whoever configured the VPC",
+], exp:[
+"Correct — AWS manages security \"of\" the cloud, including the physical infrastructure and virtualization layer.",
+"Wrong — the customer is responsible for their guest OS, applications, and data — not the underlying hypervisor.",
+"Wrong — auditors verify compliance; they don't patch AWS infrastructure.",
+"Wrong — VPC configuration is a customer responsibility, but it's unrelated to hypervisor patching."
+]},
+{domain:"security", q:"Under the Shared Responsibility Model, who is responsible for configuring security group rules on an EC2 instance?", options:[
+"The customer",
+"AWS",
+"AWS Support",
+"The instance configures itself automatically",
+], exp:[
+"Correct — security in the cloud, including network configuration like security groups, is the customer's responsibility.",
+"Wrong — AWS secures the underlying infrastructure but does not configure your application-level network rules.",
+"Wrong — AWS Support can advise, but configuring your resources is still on the customer.",
+"Wrong — security groups default to denying inbound traffic and must be explicitly configured by the customer."
+]},
+{domain:"security", q:"What is the recommended best practice for the AWS account root user?", options:[
+"Enable MFA on it and avoid using it for everyday tasks",
+"Use it for all daily administrative work",
+"Share its credentials with the whole team for convenience",
+"Disable MFA so sign-in is faster",
+], exp:[
+"Correct — AWS recommends locking down the root user with MFA and creating individual IAM users/roles for daily work.",
+"Wrong — daily tasks should use IAM users or roles with least-privilege permissions, not the root user.",
+"Wrong — sharing root credentials removes accountability and dramatically increases security risk.",
+"Wrong — MFA should be enabled on the root user, not disabled, since it has unrestricted account access."
+]},
+{domain:"security", q:"Which IAM feature grants temporary permissions to a service, application, or federated user without sharing long-term credentials?", options:[
+"IAM role",
+"IAM group",
+"IAM user",
+"The root account",
+], exp:[
+"Correct — roles are assumed temporarily and issue short-lived credentials, ideal for services or federated access.",
+"Wrong — a group is just a collection of IAM users that share permissions; it doesn't grant temporary credentials itself.",
+"Wrong — an IAM user typically has long-term credentials (password or access keys), not temporary ones.",
+"Wrong — the root user has permanent, unrestricted credentials — the opposite of temporary, limited access."
+]},
+{domain:"security", q:"What does the principle of least privilege mean in IAM?", options:[
+"Grant only the permissions necessary to perform a specific task, nothing more",
+"Grant administrator access to every user by default",
+"Deny every user access to all resources at all times",
+"Grant permissions based on how long someone has worked at the company",
+], exp:[
+"Correct — least privilege minimizes risk by limiting what each identity can access to only what it needs.",
+"Wrong — broad default access increases the attack surface and violates least privilege.",
+"Wrong — denying all access would make the system unusable; least privilege is about the right amount of access, not none.",
+"Wrong — permissions should be based on job function/need, not tenure."
+]},
+{domain:"security", q:"Which AWS service centralizes access to compliance reports and certifications, such as SOC and PCI DSS documentation?", options:[
+"AWS Artifact",
+"AWS Trusted Advisor",
+"AWS Config",
+"AWS Shield",
+], exp:[
+"Correct — AWS Artifact is the self-service portal for downloading AWS's compliance reports and agreements.",
+"Wrong — Trusted Advisor gives recommendations on cost, performance, security, and fault tolerance, not compliance documents.",
+"Wrong — AWS Config tracks resource configuration changes, not compliance certification documents.",
+"Wrong — AWS Shield protects against DDoS attacks; it has no role in compliance reporting."
+]},
+{domain:"security", q:"Which service continuously analyzes account and network activity using machine learning to detect threats like unusual API calls or compromised instances?", options:[
+"Amazon GuardDuty",
+"AWS WAF",
+"AWS Shield",
+"Amazon Inspector",
+], exp:[
+"Correct — GuardDuty is a threat detection service that monitors for malicious or unauthorized behavior.",
+"Wrong — WAF filters malicious web traffic based on rules; it doesn't perform account-wide behavioral threat detection.",
+"Wrong — Shield protects against DDoS attacks specifically, not general anomalous activity.",
+"Wrong — Inspector scans workloads (like EC2 and containers) for software vulnerabilities, not account-wide behavior."
+]},
+{domain:"security", q:"Which service helps protect web applications from common exploits such as SQL injection and cross-site scripting?", options:[
+"AWS WAF",
+"Amazon GuardDuty",
+"AWS Shield Standard",
+"AWS KMS",
+], exp:[
+"Correct — WAF (Web Application Firewall) lets you create rules to filter malicious HTTP/HTTPS requests.",
+"Wrong — GuardDuty detects threats across your account, but doesn't filter web application layer requests.",
+"Wrong — Shield Standard protects against network and transport layer DDoS attacks, not injection attacks.",
+"Wrong — KMS manages encryption keys; it has no request-filtering capability."
+]},
+{domain:"security", q:"What does AWS Shield protect against?", options:[
+"Distributed Denial of Service (DDoS) attacks",
+"SQL injection attacks exclusively",
+"Malware running on EC2 instances",
+"Data corruption within Amazon S3",
+], exp:[
+"Correct — Shield (Standard or Advanced) is purpose-built to protect against DDoS attacks.",
+"Wrong — SQL injection is mitigated using AWS WAF rules, not Shield.",
+"Wrong — malware protection is typically handled by third-party or endpoint security tools, not Shield.",
+"Wrong — S3 durability and versioning address data integrity, which is unrelated to Shield's DDoS focus."
+]},
+{domain:"security", q:"Which service should you use to automatically discover and protect sensitive data, such as personally identifiable information (PII), stored in Amazon S3?", options:[
+"Amazon Macie",
+"Amazon Inspector",
+"AWS Config",
+"AWS CloudTrail",
+], exp:[
+"Correct — Macie uses machine learning to discover and classify sensitive data like PII in S3.",
+"Wrong — Inspector scans compute resources for vulnerabilities, not data classification in S3.",
+"Wrong — Config tracks resource configuration compliance, not data content.",
+"Wrong — CloudTrail logs API activity; it doesn't scan S3 object content for sensitive data."
+]},
+{domain:"security", q:"Which statement about security groups is TRUE?", options:[
+"Security groups are stateful, so return traffic is automatically allowed regardless of outbound rules",
+"Security groups are stateless and require explicit outbound rules for return traffic",
+"Security groups operate only at the subnet level, never on individual instances",
+"Security groups can only be used to deny traffic, never to allow it",
+], exp:[
+"Correct — because security groups are stateful, response traffic to an allowed request is automatically permitted.",
+"Wrong — that statelessness describes Network ACLs, not security groups.",
+"Wrong — security groups act as a virtual firewall at the instance (elastic network interface) level, not the subnet level.",
+"Wrong — security groups only contain allow rules; they cannot explicitly deny traffic."
+]},
+{domain:"security", q:"Which construct operates at the subnet level, is stateless, and evaluates numbered rules in order?", options:[
+"Network ACL",
+"Security Group",
+"IAM policy",
+"AWS Shield",
+], exp:[
+"Correct — Network ACLs are stateless, subnet-level firewalls whose rules are evaluated in numeric order.",
+"Wrong — security groups are stateful and apply at the instance level, not the subnet level.",
+"Wrong — IAM policies control permissions for identities and resources, not network traffic.",
+"Wrong — Shield mitigates DDoS attacks; it isn't a rule-based traffic filter at the subnet level."
+]},
+{domain:"security", q:"Which service records API calls made within your AWS account for governance, compliance, and auditing purposes?", options:[
+"AWS CloudTrail",
+"Amazon CloudWatch",
+"AWS Config",
+"Amazon Macie",
+], exp:[
+"Correct — CloudTrail logs who did what, when, and from where across your AWS account's API activity.",
+"Wrong — CloudWatch focuses on monitoring metrics, logs, and alarms for performance, not an audit trail of API calls.",
+"Wrong — Config tracks configuration state and changes to resources, complementing but distinct from CloudTrail's API logging.",
+"Wrong — Macie classifies sensitive data; it doesn't log account-wide API activity."
+]},
+{domain:"security", q:"Which service continuously assesses your AWS resource configurations against a desired state and tracks configuration changes over time?", options:[
+"AWS Config",
+"AWS CloudTrail",
+"Amazon Inspector",
+"AWS Trusted Advisor",
+], exp:[
+"Correct — Config records resource configurations and evaluates them against rules to flag drift or non-compliance.",
+"Wrong — CloudTrail logs API call activity; it doesn't evaluate configuration compliance directly.",
+"Wrong — Inspector assesses workloads for vulnerabilities, not general resource configuration compliance.",
+"Wrong — Trusted Advisor gives best-practice recommendations, but it isn't a continuous configuration-change tracker."
+]},
+{domain:"security", q:"Which service automatically assesses EC2 instances and container workloads for software vulnerabilities and unintended network exposure?", options:[
+"Amazon Inspector",
+"Amazon GuardDuty",
+"AWS Shield",
+"Amazon Macie",
+], exp:[
+"Correct — Inspector performs automated security assessments looking for vulnerabilities and network exposure.",
+"Wrong — GuardDuty focuses on detecting active threats and anomalous behavior, not scanning for known vulnerabilities.",
+"Wrong — Shield defends against DDoS attacks and doesn't scan for vulnerabilities.",
+"Wrong — Macie's focus is discovering sensitive data in storage, not vulnerability scanning."
+]},
+{domain:"security", q:"Which statement about encrypting data on AWS is correct?", options:[
+"Customers can use AWS KMS to create, manage, and control cryptographic keys used to encrypt their data",
+"AWS automatically encrypts all customer data with no configuration options available",
+"Encryption is available only for objects stored in Amazon S3",
+"Only AWS employees are permitted to manage encryption keys",
+], exp:[
+"Correct — AWS Key Management Service (KMS) lets customers create and control keys used across many AWS services.",
+"Wrong — while some services encrypt by default, customers generally choose and configure encryption options and keys.",
+"Wrong — encryption is available across many services, including EBS, RDS, and DynamoDB, not just S3.",
+"Wrong — customers can create and manage their own KMS keys (customer managed keys), not just AWS."
+]},
+{domain:"security", q:"Which policy type, applied within AWS Organizations, sets the maximum available permissions for accounts in an organizational unit?", options:[
+"Service Control Policy (SCP)",
+"IAM identity-based policy",
+"S3 bucket policy",
+"Resource-based policy",
+], exp:[
+"Correct — SCPs set permission guardrails across accounts in an OU, defining the ceiling of what identities can do.",
+"Wrong — identity-based policies grant permissions to a specific IAM user, group, or role within one account.",
+"Wrong — a bucket policy is a resource-based policy scoped to a single S3 bucket, not an organization-wide guardrail.",
+"Wrong — resource-based policies attach to a specific resource, unlike the organization-wide scope of an SCP."
+]},
+{domain:"security", q:"Which statement about AWS's penetration testing policy is accurate?", options:[
+"Customers may perform penetration tests on their own resources for a defined list of allowed services without prior AWS approval, as long as they follow AWS policy",
+"Penetration testing is prohibited for all AWS customers under all circumstances",
+"AWS requires no notification or adherence to any policy for penetration testing",
+"Only AWS employees are permitted to conduct penetration tests on customer resources",
+], exp:[
+"Correct — AWS publishes a policy that permits customer-initiated testing of many services without prior approval, subject to restrictions.",
+"Wrong — testing is allowed for permitted services under AWS's customer support policy for penetration testing.",
+"Wrong — customers must still follow AWS's stated penetration testing policy and rules of engagement.",
+"Wrong — customers, not just AWS employees, may test their own resources under the policy."
+]},
+{domain:"security", q:"Which service should be used to securely store and automatically rotate database credentials and other secrets?", options:[
+"AWS Secrets Manager",
+"Amazon S3",
+"AWS IAM Access Analyzer",
+"Amazon CloudWatch",
+], exp:[
+"Correct — Secrets Manager securely stores secrets and can automatically rotate them on a schedule.",
+"Wrong — S3 is object storage; it is not designed for automatic secret rotation or fine-grained secret access.",
+"Wrong — Access Analyzer identifies resources shared with external entities; it doesn't store or rotate secrets.",
+"Wrong — CloudWatch is for monitoring metrics and logs, not secret storage."
+]},
+{domain:"security", q:"What is Multi-Factor Authentication (MFA) used for?", options:[
+"Adding an extra layer of login security beyond just a username and password",
+"Encrypting data at rest in a database",
+"Distributing traffic across multiple EC2 instances",
+"Automatically scaling infrastructure based on demand",
+], exp:[
+"Correct — MFA requires an additional verification factor (like a one-time code) alongside a password, reducing account takeover risk.",
+"Wrong — encryption at rest is handled by services like KMS, not MFA.",
+"Wrong — traffic distribution is the job of a load balancer, not MFA.",
+"Wrong — scaling is handled by Auto Scaling, unrelated to authentication."
+]},
+{domain:"security", q:"Under the Shared Responsibility Model, what does \"security OF the cloud\" refer to?", options:[
+"AWS's responsibility to protect the infrastructure that runs all of the services offered in the AWS Cloud",
+"The customer's responsibility to secure their own data and applications",
+"A responsibility held only by third-party auditors",
+"Something that no party is responsible for",
+], exp:[
+"Correct — AWS secures the hardware, software, networking, and facilities that run AWS services.",
+"Wrong — that describes \"security IN the cloud,\" which is the customer's part of the model.",
+"Wrong — auditors verify and certify compliance; they don't hold this operational responsibility.",
+"Wrong — the entire premise of the shared responsibility model is that responsibility is divided, not absent."
+]},
+
+// ---------------- CLOUD TECHNOLOGY AND SERVICES ----------------
+{domain:"tech", q:"Which AWS service provides resizable virtual server compute capacity in the cloud?", options:[
+"Amazon EC2",
+"Amazon S3",
+"Amazon RDS",
+"AWS Lambda",
+], exp:[
+"Correct — EC2 (Elastic Compute Cloud) provides virtual servers that you can resize and configure as needed.",
+"Wrong — S3 is object storage, not virtual server compute.",
+"Wrong — RDS is a managed relational database service, not general-purpose compute.",
+"Wrong — Lambda runs code without provisioning servers at all, the opposite of EC2's model."
+]},
+{domain:"tech", q:"Which compute service lets you run code without provisioning or managing servers, billed based on requests and execution time?", options:[
+"AWS Lambda",
+"Amazon EC2",
+"Amazon Lightsail",
+"AWS Batch",
+], exp:[
+"Correct — Lambda is a serverless compute service that runs your code in response to events and charges per invocation/duration.",
+"Wrong — EC2 requires you to provision and manage virtual server instances yourself.",
+"Wrong — Lightsail provides simplified virtual private servers, but you still manage a running instance.",
+"Wrong — Batch schedules and runs batch computing jobs, typically on managed EC2 or Fargate resources, not a pure per-invocation model."
+]},
+{domain:"tech", q:"Which S3 storage class is designed for data that is accessed less frequently but still needs millisecond retrieval, at a lower storage price than S3 Standard?", options:[
+"S3 Standard-Infrequent Access (S3 Standard-IA)",
+"S3 Glacier Deep Archive",
+"S3 Intelligent-Tiering exclusively",
+"S3 One Zone-Express",
+], exp:[
+"Correct — S3 Standard-IA offers the same low latency as Standard at a lower storage cost, with a retrieval fee.",
+"Wrong — Glacier Deep Archive is for long-term archival with retrieval times measured in hours, not milliseconds.",
+"Wrong — Intelligent-Tiering automatically moves data between tiers, but the question describes IA specifically.",
+"Wrong — this is not a real S3 storage class name."
+]},
+{domain:"tech", q:"Which storage option is best suited for long-term archival data where retrieval times of several hours are acceptable, in exchange for very low storage cost?", options:[
+"Amazon S3 Glacier Deep Archive",
+"Amazon EBS",
+"Amazon EFS",
+"Amazon S3 Standard",
+], exp:[
+"Correct — Glacier Deep Archive offers the lowest-cost S3 storage class, intended for rarely accessed archival data.",
+"Wrong — EBS is block storage attached to EC2 instances, priced for active use, not deep archival.",
+"Wrong — EFS is a shared file system meant for active, concurrent access, not cold archival.",
+"Wrong — S3 Standard is designed for frequently accessed data and costs more than Glacier tiers."
+]},
+{domain:"tech", q:"Which storage type is block storage that attaches to a single EC2 instance, functioning like a virtual hard drive?", options:[
+"Amazon EBS",
+"Amazon S3",
+"Amazon EFS",
+"Amazon S3 Glacier",
+], exp:[
+"Correct — Elastic Block Store (EBS) volumes attach to individual EC2 instances as persistent block storage.",
+"Wrong — S3 is object storage accessed over HTTP(S), not block storage attached to an instance.",
+"Wrong — EFS is a file system designed to be mounted by many instances concurrently, not a single-instance block volume.",
+"Wrong — Glacier is an archival storage class within S3, not block storage."
+]},
+{domain:"tech", q:"Which service provides a scalable, fully managed file system that multiple EC2 instances can mount and access concurrently?", options:[
+"Amazon EFS",
+"Amazon EBS",
+"Amazon S3",
+"AWS Storage Gateway",
+], exp:[
+"Correct — Elastic File System (EFS) is a shared, elastic NFS file system that many instances can mount at once.",
+"Wrong — an EBS volume is typically attached to only one instance at a time.",
+"Wrong — S3 is object storage accessed via API calls, not a mountable file system for EC2 by default.",
+"Wrong — Storage Gateway connects on-premises environments to AWS storage; it isn't itself a shared file system for EC2."
+]},
+{domain:"tech", q:"A company needs to move 100 TB of data into AWS but has very limited internet bandwidth. Which service is best suited for this?", options:[
+"AWS Snowball",
+"Amazon S3 Transfer Acceleration alone",
+"AWS Direct Connect, which must be provisioned same-day",
+"Amazon EBS",
+], exp:[
+"Correct — Snowball is a physical device AWS ships to you for offline transfer of large data volumes, ideal for limited bandwidth.",
+"Wrong — Transfer Acceleration speeds up transfers over the existing internet path, but doesn't solve a fundamental bandwidth shortage for huge datasets.",
+"Wrong — Direct Connect provides a dedicated network link, but setting it up takes time and isn't a same-day solution for a one-time large transfer.",
+"Wrong — EBS is block storage for EC2, not a bulk data-transfer mechanism into AWS."
+]},
+{domain:"tech", q:"Which relational database service automates tasks like patching, backups, and failover for engines such as MySQL and PostgreSQL?", options:[
+"Amazon RDS",
+"Amazon DynamoDB",
+"Amazon Redshift",
+"Amazon Neptune",
+], exp:[
+"Correct — RDS is a managed relational database service that handles routine administrative tasks for supported engines.",
+"Wrong — DynamoDB is a managed NoSQL key-value/document database, not relational.",
+"Wrong — Redshift is a data warehouse for analytics, not a general-purpose relational OLTP database.",
+"Wrong — Neptune is a managed graph database service, not a relational database."
+]},
+{domain:"tech", q:"Which AWS database service is a fully managed key-value and document NoSQL database offering single-digit millisecond performance at virtually any scale?", options:[
+"Amazon DynamoDB",
+"Amazon RDS",
+"Amazon Redshift",
+"Amazon Aurora",
+], exp:[
+"Correct — DynamoDB is AWS's serverless NoSQL database built for fast, scalable key-value and document workloads.",
+"Wrong — RDS hosts traditional relational database engines, not NoSQL data models.",
+"Wrong — Redshift is designed for large-scale analytical queries, not millisecond transactional lookups.",
+"Wrong — Aurora is a relational database engine compatible with MySQL/PostgreSQL, not a NoSQL store."
+]},
+{domain:"tech", q:"Which service is a fully managed data warehouse optimized for running analytics and complex queries across large datasets?", options:[
+"Amazon Redshift",
+"Amazon RDS",
+"Amazon DynamoDB",
+"Amazon ElastiCache",
+], exp:[
+"Correct — Redshift is purpose-built as a data warehouse for fast analytical (OLAP) queries at scale.",
+"Wrong — RDS is optimized for transactional (OLTP) workloads, not large-scale analytics.",
+"Wrong — DynamoDB is a NoSQL database for transactional workloads, not a data warehouse.",
+"Wrong — ElastiCache is an in-memory caching service, not a data warehouse."
+]},
+{domain:"tech", q:"Which service provides a logically isolated virtual network within AWS where you can launch resources?", options:[
+"Amazon VPC",
+"Amazon Route 53",
+"AWS Direct Connect",
+"Amazon CloudFront",
+], exp:[
+"Correct — a Virtual Private Cloud (VPC) is your own isolated network space within AWS for launching resources.",
+"Wrong — Route 53 is a DNS service, not a virtual network container.",
+"Wrong — Direct Connect provides a dedicated network link from on-premises to AWS, not the isolated network itself.",
+"Wrong — CloudFront is a content delivery network, unrelated to defining a private virtual network."
+]},
+{domain:"tech", q:"Which service is a scalable Domain Name System (DNS) web service?", options:[
+"Amazon Route 53",
+"Amazon CloudFront",
+"AWS Global Accelerator",
+"Amazon VPC",
+], exp:[
+"Correct — Route 53 translates domain names into IP addresses and offers features like health checks and routing policies.",
+"Wrong — CloudFront is a CDN for caching and delivering content, not a DNS service.",
+"Wrong — Global Accelerator improves availability and performance of applications using the AWS global network, but it isn't a DNS service.",
+"Wrong — VPC is a virtual network construct, unrelated to DNS resolution."
+]},
+{domain:"tech", q:"Which service is a global content delivery network (CDN) that caches content at edge locations to reduce latency for end users?", options:[
+"Amazon CloudFront",
+"Amazon Route 53",
+"AWS Direct Connect",
+"AWS Snowball",
+], exp:[
+"Correct — CloudFront caches and delivers content from edge locations close to users, reducing latency.",
+"Wrong — Route 53 handles DNS resolution, not content caching/delivery.",
+"Wrong — Direct Connect is a dedicated network connection to AWS, not a CDN.",
+"Wrong — Snowball is a physical data transfer device, unrelated to content delivery."
+]},
+{domain:"tech", q:"Which service provides a dedicated, private network connection between an on-premises data center and AWS?", options:[
+"AWS Direct Connect",
+"AWS Site-to-Site VPN over the public internet",
+"Amazon CloudFront",
+"Amazon Route 53",
+], exp:[
+"Correct — Direct Connect establishes a dedicated physical network link between your premises and AWS, bypassing the public internet.",
+"Wrong — Site-to-Site VPN creates an encrypted tunnel over the public internet, not a dedicated private line.",
+"Wrong — CloudFront is a CDN, not a network connectivity service to on-premises infrastructure.",
+"Wrong — Route 53 is a DNS service, unrelated to dedicated network connectivity."
+]},
+{domain:"tech", q:"Which service automatically distributes incoming application traffic across multiple targets, such as EC2 instances in different Availability Zones?", options:[
+"Elastic Load Balancing (ELB)",
+"Amazon Route 53 exclusively",
+"AWS Auto Scaling exclusively",
+"AWS Direct Connect",
+], exp:[
+"Correct — ELB automatically distributes incoming traffic across multiple targets to improve availability and fault tolerance.",
+"Wrong — Route 53 can perform DNS-based routing, but ELB is the primary service for distributing traffic to backend targets.",
+"Wrong — Auto Scaling adjusts the number of instances; it doesn't itself distribute incoming traffic.",
+"Wrong — Direct Connect is about network connectivity to AWS, not distributing application traffic among targets."
+]},
+{domain:"tech", q:"Which service lets you monitor AWS resources and applications by collecting metrics and logs and configuring alarms?", options:[
+"Amazon CloudWatch",
+"AWS CloudTrail",
+"AWS Config",
+"AWS X-Ray",
+], exp:[
+"Correct — CloudWatch collects metrics and logs and can trigger alarms and automated actions based on thresholds.",
+"Wrong — CloudTrail focuses on logging API calls for auditing, not general performance metrics.",
+"Wrong — Config tracks resource configuration compliance over time, not real-time performance metrics/alarms.",
+"Wrong — X-Ray traces requests through distributed applications for debugging, a narrower use case than general monitoring."
+]},
+{domain:"tech", q:"Which service lets you model and provision AWS resources using declarative templates written in JSON or YAML?", options:[
+"AWS CloudFormation",
+"AWS Elastic Beanstalk",
+"AWS OpsWorks",
+"AWS Systems Manager",
+], exp:[
+"Correct — CloudFormation is AWS's Infrastructure as Code service, provisioning resources from JSON/YAML templates.",
+"Wrong — Elastic Beanstalk automatically manages the infrastructure for deploying an application, but isn't a general IaC templating service.",
+"Wrong — OpsWorks provides managed Chef/Puppet configuration management, a different automation approach than declarative templates.",
+"Wrong — Systems Manager provides operational tools like Session Manager and Parameter Store, not resource provisioning via templates."
+]},
+{domain:"tech", q:"Which service lets you deploy and manage an application by simply uploading your code, automatically handling capacity provisioning, load balancing, and scaling?", options:[
+"AWS Elastic Beanstalk",
+"Amazon EC2",
+"AWS Lambda",
+"AWS Fargate",
+], exp:[
+"Correct — Elastic Beanstalk handles the underlying infrastructure automatically once you upload your application code.",
+"Wrong — with plain EC2, you must provision and configure the infrastructure yourself.",
+"Wrong — Lambda runs individual functions rather than deploying a full application stack with load balancing.",
+"Wrong — Fargate removes the need to manage servers for containers, but it doesn't automatically handle the full application deployment workflow like Beanstalk."
+]},
+{domain:"tech", q:"Which service is a fully managed message queuing service used to decouple and coordinate components of a distributed application?", options:[
+"Amazon SQS",
+"Amazon SNS",
+"Amazon EventBridge",
+"AWS Step Functions",
+], exp:[
+"Correct — Simple Queue Service (SQS) lets components send, store, and receive messages asynchronously via queues.",
+"Wrong — SNS is a pub/sub notification service that pushes messages to subscribers, not a queue for polling.",
+"Wrong — EventBridge routes events between applications and AWS services based on rules, a different pattern than a simple queue.",
+"Wrong — Step Functions orchestrates multi-step workflows, rather than acting as a message queue."
+]},
+{domain:"tech", q:"Which service is a fully managed publish/subscribe messaging service used to push notifications to subscribers such as email, SMS, or Lambda functions?", options:[
+"Amazon SNS",
+"Amazon SQS",
+"Amazon MQ",
+"Amazon Kinesis",
+], exp:[
+"Correct — Simple Notification Service (SNS) publishes messages to multiple subscriber endpoints or clients.",
+"Wrong — SQS is a queue that consumers poll for messages, rather than a push-based pub/sub service.",
+"Wrong — Amazon MQ is a managed message broker for common protocols like ActiveMQ/RabbitMQ, a different use case.",
+"Wrong — Kinesis is designed for real-time streaming data ingestion and processing, not pub/sub notifications."
+]},
+{domain:"tech", q:"Which serverless compute engine lets you run containers without provisioning or managing the underlying EC2 instances?", options:[
+"AWS Fargate",
+"Amazon EC2",
+"AWS Lambda@Edge",
+"AWS Batch on EC2",
+], exp:[
+"Correct — Fargate runs containers (via ECS or EKS) without requiring you to manage the underlying servers.",
+"Wrong — running containers on EC2 directly requires you to manage and scale the underlying instances yourself.",
+"Wrong — Lambda@Edge runs Lambda functions at edge locations for content customization, not general container hosting.",
+"Wrong — Batch on EC2 still relies on managed EC2 instances under the hood, unlike Fargate's serverless model."
+]},
+{domain:"tech", q:"Which service offers pre-trained AI capabilities to analyze images and video, identifying objects, people, text, and scenes?", options:[
+"Amazon Rekognition",
+"Amazon SageMaker",
+"Amazon Comprehend",
+"Amazon Lex",
+], exp:[
+"Correct — Rekognition provides image and video analysis, including object, face, and text detection.",
+"Wrong — SageMaker is a platform for building, training, and deploying custom machine learning models, not a pre-built image analysis API.",
+"Wrong — Comprehend performs natural language processing on text, not image/video analysis.",
+"Wrong — Lex builds conversational chatbot interfaces using voice and text, unrelated to image analysis."
+]},
+{domain:"tech", q:"Which service provides a fully managed platform to build, train, and deploy custom machine learning models?", options:[
+"Amazon SageMaker",
+"Amazon Rekognition",
+"Amazon Polly",
+"Amazon Transcribe",
+], exp:[
+"Correct — SageMaker provides the tools and infrastructure to build, train, and deploy ML models end-to-end.",
+"Wrong — Rekognition is a pre-trained image/video analysis service, not a general model-building platform.",
+"Wrong — Polly converts text to lifelike speech; it doesn't let you train custom models.",
+"Wrong — Transcribe converts speech to text automatically; it's a pre-built service, not a model-training platform."
+]},
+{domain:"tech", q:"A company wants to run containerized workloads and is deciding between managing its own cluster of EC2 instances or using a serverless option. Which pair of AWS offerings represents these two choices for running containers?", options:[
+"Amazon ECS/EKS on EC2 versus AWS Fargate",
+"Amazon S3 versus Amazon EBS",
+"Amazon RDS versus Amazon DynamoDB",
+"AWS Lambda versus Amazon SNS",
+], exp:[
+"Correct — you can run ECS or EKS tasks on self-managed EC2 instances, or on Fargate, which removes server management entirely.",
+"Wrong — S3 and EBS are two storage services, unrelated to the container orchestration choice.",
+"Wrong — RDS and DynamoDB are two different database services, not container hosting options.",
+"Wrong — Lambda and SNS serve serverless functions and notifications respectively, not container orchestration."
+]},
+
+// ---------------- BILLING, PRICING & SUPPORT ----------------
+{domain:"billing", q:"Which EC2 pricing model offers the deepest discount in exchange for using spare, unused EC2 capacity that AWS can reclaim with short notice?", options:[
+"Spot Instances",
+"On-Demand Instances",
+"Reserved Instances",
+"Dedicated Hosts",
+], exp:[
+"Correct — Spot Instances let you bid on unused capacity at steep discounts, but AWS can interrupt them with short notice.",
+"Wrong — On-Demand pricing has no long-term commitment and no interruption risk, but it costs more than Spot.",
+"Wrong — Reserved Instances trade a 1- or 3-year commitment for a discount, without the interruption risk of Spot.",
+"Wrong — Dedicated Hosts give you a physical server for licensing/compliance reasons, at a premium, not the deepest discount."
+]},
+{domain:"billing", q:"Which pricing model provides a significant discount in exchange for committing to a consistent amount of usage over a 1- or 3-year term?", options:[
+"Reserved Instances / Savings Plans",
+"Spot Instances",
+"On-Demand Instances",
+"AWS Free Tier",
+], exp:[
+"Correct — Reserved Instances and Savings Plans exchange a usage commitment for lower rates than On-Demand pricing.",
+"Wrong — Spot Instances have no term commitment; pricing floats and capacity can be reclaimed at any time.",
+"Wrong — On-Demand pricing requires no commitment but also carries no discount for guaranteed usage.",
+"Wrong — Free Tier offers limited free usage for new accounts/services, not a discount tied to a usage commitment."
+]},
+{domain:"billing", q:"Which tool helps you estimate the cost of AWS services before you deploy them?", options:[
+"AWS Pricing Calculator",
+"AWS Budgets",
+"AWS Cost Explorer",
+"AWS Trusted Advisor",
+], exp:[
+"Correct — the AWS Pricing Calculator builds cost estimates for planned architectures before you deploy anything.",
+"Wrong — Budgets alerts you about costs and usage after you've defined thresholds, not pre-deployment estimation.",
+"Wrong — Cost Explorer visualizes historical and forecasted costs based on actual usage, not a pre-deployment estimate tool.",
+"Wrong — Trusted Advisor reviews your existing account for best practices, not future cost estimation."
+]},
+{domain:"billing", q:"Which tool lets you visualize, understand, and analyze your AWS costs and usage patterns over time?", options:[
+"AWS Cost Explorer",
+"AWS Pricing Calculator",
+"AWS Budgets",
+"Amazon CloudWatch",
+], exp:[
+"Correct — Cost Explorer provides interactive graphs and reports of historical and forecasted spend.",
+"Wrong — the Pricing Calculator estimates future costs before deployment; it doesn't analyze historical billing data.",
+"Wrong — Budgets sets alerts on thresholds; it isn't primarily a cost visualization and analysis tool.",
+"Wrong — CloudWatch monitors operational metrics and logs, not billing and cost data."
+]},
+{domain:"billing", q:"Which service lets you set custom alerts that trigger when your costs or usage exceed, or are forecasted to exceed, a defined threshold?", options:[
+"AWS Budgets",
+"AWS Cost Explorer",
+"AWS Pricing Calculator",
+"AWS Cost and Usage Report",
+], exp:[
+"Correct — Budgets lets you define cost or usage thresholds and sends alerts when they're breached or forecasted to be breached.",
+"Wrong — Cost Explorer visualizes spending trends but doesn't natively send threshold-based alerts.",
+"Wrong — the Pricing Calculator is for pre-deployment estimates, not ongoing alerting.",
+"Wrong — the Cost and Usage Report provides detailed raw billing data exports, not built-in alerting."
+]},
+{domain:"billing", q:"Which AWS Support plan includes a designated Technical Account Manager (TAM) and the fastest response times for critical issues?", options:[
+"Enterprise Support",
+"Basic Support",
+"Developer Support",
+"Business Support",
+], exp:[
+"Correct — Enterprise Support includes a TAM and the fastest guaranteed response times, including for business-critical issues.",
+"Wrong — Basic Support is included free for all accounts but offers no technical support cases or TAM.",
+"Wrong — Developer Support offers business-hours email access to Cloud Support Associates, without a TAM.",
+"Wrong — Business Support offers 24/7 technical support with faster response times than Developer, but no TAM, unlike Enterprise."
+]},
+{domain:"billing", q:"What is a key benefit of using consolidated billing within AWS Organizations?", options:[
+"Combine usage across multiple accounts to share volume pricing discounts and receive one bill",
+"Automatically encrypt all data across every member account",
+"Grant root user access to every member account by default",
+"Eliminate the need to provide any payment method",
+], exp:[
+"Correct — consolidated billing aggregates usage across accounts, which can help reach volume discount tiers faster, under a single bill.",
+"Wrong — consolidated billing manages billing relationships, not encryption configuration.",
+"Wrong — member accounts retain their own root user; consolidated billing doesn't share root access across accounts.",
+"Wrong — a valid payment method is still required for the management (payer) account."
+]},
+{domain:"billing", q:"Which feature of AWS Trusted Advisor helps identify opportunities to reduce costs, such as idle or underutilized resources?", options:[
+"Cost Optimization checks",
+"Security checks only",
+"Performance checks only",
+"Fault Tolerance checks only",
+], exp:[
+"Correct — Trusted Advisor's Cost Optimization category flags things like idle load balancers or underutilized EC2 instances.",
+"Wrong — Security checks focus on issues like open security groups or unused IAM credentials, not cost savings.",
+"Wrong — Performance checks focus on service limits and throughput, not identifying cost-saving opportunities.",
+"Wrong — Fault Tolerance checks focus on resiliency and backups, not cost reduction."
+]},
+
+// ---------------- ADDITIONAL: CLOUD CONCEPTS ----------------
+{domain:"concepts", q:"Which Well-Architected Framework pillar focuses on minimizing the environmental impact of running cloud workloads?", options:[
+"Sustainability",
+"Cost Optimization",
+"Operational Excellence",
+"Reliability"
+], exp:[
+"Correct — the Sustainability pillar addresses long-term environmental impacts, such as energy and resource efficiency.",
+"Wrong — Cost Optimization is about avoiding unnecessary spend, a related but distinct concern from environmental impact.",
+"Wrong — Operational Excellence is about running and monitoring systems to deliver business value, not environmental impact.",
+"Wrong — Reliability is about a workload's ability to recover from failures and meet demand, not sustainability."
+]},
+{domain:"concepts", q:"Which Well-Architected Framework pillar focuses on a workload's ability to recover from disruptions and consistently meet customer demand?", options:[
+"Reliability",
+"Performance Efficiency",
+"Security",
+"Sustainability"
+], exp:[
+"Correct — Reliability covers recovery planning, distributed system design, and handling failures gracefully.",
+"Wrong — Performance Efficiency is about using computing resources efficiently, not specifically about recovering from disruptions.",
+"Wrong — Security is about protecting information, systems, and assets.",
+"Wrong — Sustainability addresses environmental impact, not resilience to disruption."
+]},
+{domain:"concepts", q:"Which of the following is a benefit AWS associates with using the AWS Cloud Adoption Framework (AWS CAF)?", options:[
+"Reduced business risk and improved operational efficiency during cloud adoption",
+"A guaranteed reduction in your AWS bill within 30 days",
+"Automatic migration of all workloads without any planning",
+"Elimination of the need for any employee training",
+], exp:[
+"Correct — AWS CAF is intended to help organizations reduce business risk, improve ESG performance, increase revenue, and increase operational efficiency as they adopt the cloud.",
+"Wrong — AWS CAF provides organizational guidance; it does not guarantee any specific billing outcome.",
+"Wrong — CAF is a planning and readiness framework, not an automated migration tool.",
+"Wrong — CAF actually emphasizes building cloud skills and readiness across the organization, including training."
+]},
+{domain:"concepts", q:"In the context of AWS CAF's stated benefits, what does the acronym \"ESG\" refer to?", options:[
+"Environmental, Social, and Governance performance",
+"Enterprise Support Guarantee",
+"Elastic Scaling Group",
+"Estimated Savings Goal",
+], exp:[
+"Correct — AWS CAF cites improved ESG (Environmental, Social, and Governance) performance as one of its benefits.",
+"Wrong — this is not a real AWS term; AWS Support has an \"Enterprise\" tier, but no \"Enterprise Support Guarantee.\"",
+"Wrong — this describes Auto Scaling groups, unrelated to the ESG acronym.",
+"Wrong — this is not a term AWS uses; it is a distractor that sounds plausible but is fabricated."
+]},
+{domain:"concepts", q:"In cloud economics, what is the key difference between fixed costs and variable costs?", options:[
+"Fixed costs stay constant regardless of usage, while variable costs scale up or down with actual usage",
+"Fixed costs only apply to Amazon S3, while variable costs apply to every other service",
+"Fixed costs are billed annually, and variable costs are billed only once",
+"There is no meaningful difference between the two terms",
+], exp:[
+"Correct — moving to the cloud generally shifts spending away from large fixed costs (like data centers) toward variable, usage-based costs.",
+"Wrong — the fixed/variable distinction is a general cost concept, not tied to one specific AWS service.",
+"Wrong — billing frequency doesn't define whether a cost is fixed or variable; usage-based scaling does.",
+"Wrong — the distinction is central to understanding why cloud cost models differ from on-premises models."
+]},
+{domain:"concepts", q:"Which of the following is a cost typically associated with running an on-premises data center that moving to AWS helps a company avoid?", options:[
+"Ongoing facility costs such as power, cooling, physical security, and real estate",
+"Amazon EC2 On-Demand usage charges",
+"Amazon S3 storage charges",
+"AWS Support plan subscription fees",
+], exp:[
+"Correct — on-premises infrastructure carries continuous facility overhead that AWS's shared infrastructure model removes for customers.",
+"Wrong — this is a cost that is incurred when using AWS, not one that is avoided by using it.",
+"Wrong — this is also a cost incurred while using AWS, not an on-premises-specific cost being avoided.",
+"Wrong — Support plan fees are optional AWS costs, not something the cloud helps you avoid from on-premises operations."
+]},
+{domain:"concepts", q:"A company wants to bring its existing, already-purchased software licenses to AWS instead of paying for AWS's included licensing option. What is this approach called?", options:[
+"Bring Your Own License (BYOL)",
+"Consolidated billing",
+"A Savings Plan",
+"A Reserved Instance",
+], exp:[
+"Correct — BYOL lets customers use previously purchased licenses on AWS infrastructure instead of paying for licenses bundled into instance pricing.",
+"Wrong — consolidated billing combines usage and billing across AWS Organizations accounts; it's unrelated to software licensing.",
+"Wrong — a Savings Plan is a compute pricing discount model, not a licensing strategy.",
+"Wrong — a Reserved Instance is a compute commitment discount, not a licensing strategy."
+]},
+{domain:"concepts", q:"What does \"rightsizing\" mean in the context of cloud cost optimization?", options:[
+"Matching instance types and sizes to actual workload requirements to avoid paying for unused capacity",
+"Always choosing the largest available instance size to avoid future resizing",
+"Purchasing a 3-year Reserved Instance for every workload regardless of usage pattern",
+"Migrating every workload to serverless compute",
+], exp:[
+"Correct — rightsizing analyzes actual utilization and adjusts resource sizes so you pay only for what you need.",
+"Wrong — over-provisioning to the largest size is the opposite of rightsizing and increases unnecessary cost.",
+"Wrong — committing to long terms without analyzing usage patterns can lead to paying for unused capacity, the opposite of rightsizing's goal.",
+"Wrong — rightsizing applies to any compute model; it doesn't mean everything must become serverless."
+]},
+{domain:"concepts", q:"How does using AWS CloudFormation to provision infrastructure support the cloud economics principle of automation?", options:[
+"It lets you define infrastructure as code, so environments can be provisioned consistently and repeatedly with less manual effort and fewer errors",
+"It automatically negotiates lower EC2 On-Demand pricing on your behalf",
+"It encrypts all data in every S3 bucket in the account by default",
+"It removes the need for an AWS account to have any IAM configuration",
+], exp:[
+"Correct — CloudFormation templates let you automate and standardize provisioning, reducing the manual work and error-proneness of clicking through the console repeatedly.",
+"Wrong — CloudFormation provisions resources at their standard prices; it doesn't negotiate custom discounts.",
+"Wrong — CloudFormation does not automatically enable encryption on every resource; that must be configured explicitly.",
+"Wrong — IAM permissions are still required to control who can create and manage CloudFormation stacks and resources."
+]},
+{domain:"concepts", q:"What is a key economic benefit of using a managed AWS service, such as Amazon RDS, instead of self-managing the same software on EC2?", options:[
+"AWS handles operational tasks like patching, backups, and failover, reducing the operational burden and staff time required",
+"Managed services are always free of charge",
+"Managed services eliminate the need for the customer to store any data",
+"Managed services remove the customer's responsibility for their own IAM permissions",
+], exp:[
+"Correct — offloading routine operational tasks to AWS reduces the time and specialized staff effort needed to keep the system running.",
+"Wrong — managed services are billed like other AWS services; they are not free.",
+"Wrong — customers still own and are responsible for their data regardless of which compute/database model they use.",
+"Wrong — customers remain responsible for configuring IAM access to their resources under the shared responsibility model."
+]},
+{domain:"concepts", q:"A company is migrating its production database to AWS and wants near-zero downtime by continuously syncing changes from the source database until a final cutover. Which migration approach does this describe?", options:[
+"Database replication (for example, using AWS Database Migration Service) to keep source and target in sync until cutover",
+"Using AWS Snowball to physically ship a one-time backup of the database",
+"Manually exporting and re-importing a CSV file once a month",
+"Shutting the database down for a week while data is copied over the internet",
+], exp:[
+"Correct — ongoing replication keeps the target database current with the source, enabling a low-downtime cutover once they're in sync.",
+"Wrong — Snowball is well-suited to large one-time bulk transfers, not continuous, near-zero-downtime replication.",
+"Wrong — periodic manual exports would not keep the databases continuously in sync and would risk significant data loss.",
+"Wrong — extended downtime is exactly what a replication-based migration approach is designed to avoid."
+]},
+{domain:"concepts", q:"Which statement best summarizes AWS's overall value proposition for adopting the cloud?", options:[
+"Access to a broad set of on-demand technology services with pay-as-you-go pricing, reducing the need for large upfront infrastructure investment",
+"A guarantee that every workload will run at a lower cost than on-premises, with no exceptions",
+"Free use of all compute, storage, and database services for the lifetime of an account",
+"Mandatory use of a single Region and a single Availability Zone for all resources",
+], exp:[
+"Correct — this combination of breadth of services, on-demand access, and consumption-based pricing is central to AWS's value proposition.",
+"Wrong — cost outcomes depend on architecture and usage patterns; AWS doesn't guarantee savings in every case.",
+"Wrong — AWS services are billed based on usage (beyond limited Free Tier offers), not free indefinitely.",
+"Wrong — AWS encourages using multiple Availability Zones and, where appropriate, multiple Regions for resilience."
+]},
+{domain:"concepts", q:"How does \"high availability\" differ from \"elasticity\" as a cloud computing benefit?", options:[
+"High availability focuses on minimizing downtime through redundancy, while elasticity focuses on automatically matching capacity to demand",
+"They are two names for exactly the same concept",
+"High availability applies only to databases, while elasticity applies only to compute",
+"High availability means using a single server with no backups, while elasticity means using multiple Regions",
+], exp:[
+"Correct — high availability is about resilience and uptime, whereas elasticity is about scaling resources up or down as demand changes.",
+"Wrong — while related, they address different concerns: uptime/resilience versus dynamic scaling.",
+"Wrong — both concepts apply broadly across compute, storage, database, and other services, not just one category each.",
+"Wrong — this description is backward and doesn't reflect either concept accurately."
+]},
+{domain:"concepts", q:"What is the primary purpose of the AWS Well-Architected Framework?", options:[
+"To provide a consistent set of best-practice pillars for evaluating and improving the design of cloud architectures",
+"To serve as a mandatory certification exam required before deploying any workload",
+"To function as AWS's cost calculator for estimating monthly bills",
+"To serve as AWS's official compliance and audit report for regulators",
+], exp:[
+"Correct — the framework offers pillars and guiding questions that teams use to review and improve their architectures.",
+"Wrong — using the Well-Architected Framework is a best practice, not a mandatory gate before deployment.",
+"Wrong — cost estimation is the role of the AWS Pricing Calculator, a separate tool.",
+"Wrong — compliance reports are provided through AWS Artifact, not the Well-Architected Framework."
+]},
+{domain:"concepts", q:"Which pair of Well-Architected pillars are most directly focused on, respectively, minimizing unnecessary spend and minimizing environmental impact?", options:[
+"Cost Optimization and Sustainability",
+"Security and Reliability",
+"Operational Excellence and Performance Efficiency",
+"Reliability and Cost Optimization",
+], exp:[
+"Correct — Cost Optimization targets avoiding unneeded costs, while Sustainability targets reducing environmental impact.",
+"Wrong — Security and Reliability address protecting assets and recovering from disruptions, not cost or environmental impact specifically.",
+"Wrong — Operational Excellence and Performance Efficiency address operations and resource efficiency, not cost or sustainability specifically.",
+"Wrong — Reliability addresses resilience, not environmental impact, so this pairing is incomplete."
+]},
+{domain:"concepts", q:"Which of the following is a real-world example of AWS customers benefiting from economies of scale?", options:[
+"AWS has lowered its on-demand service prices multiple times over the years as its infrastructure and customer base have grown",
+"Every AWS customer pays exactly the same total bill each month, regardless of usage",
+"AWS requires customers to purchase hardware in bulk to receive any discount",
+"Economies of scale only apply to customers with Enterprise Support contracts",
+], exp:[
+"Correct — as AWS's scale has grown, it has been able to reduce prices for customers multiple times, a direct result of economies of scale.",
+"Wrong — bills vary based on each customer's actual usage, not a flat universal amount.",
+"Wrong — AWS customers don't purchase physical hardware at all; that is exactly what economies of scale eliminates the need for.",
+"Wrong — economies of scale benefits (such as historical price reductions) apply broadly to AWS customers, not only Enterprise Support subscribers."
+]},
+{domain:"concepts", q:"A retailer wants to launch its application in a new overseas market as quickly as possible. Which benefit of AWS's global infrastructure directly supports this goal?", options:[
+"The ability to deploy infrastructure in a target AWS Region within minutes, instead of building new physical data centers",
+"A requirement to first build a private data center in the new country",
+"A mandatory multi-year contract before entering a new Region",
+"Free legal consulting services bundled with every AWS account",
+], exp:[
+"Correct — because AWS Regions already exist worldwide, teams can launch resources in a new geography almost immediately rather than building infrastructure from scratch.",
+"Wrong — this describes the traditional on-premises approach that AWS's global infrastructure is meant to replace.",
+"Wrong — AWS does not require long-term contracts to use a Region; usage is generally on-demand.",
+"Wrong — AWS does not provide legal consulting services as part of standard account access."
+]},
+
+// ---------------- ADDITIONAL: SECURITY AND COMPLIANCE ----------------
+{domain:"security", q:"Which service provides centralized single sign-on (SSO) access to multiple AWS accounts and business applications from one place?", options:[
+"AWS IAM Identity Center (AWS Single Sign-On)",
+"AWS Secrets Manager",
+"AWS Organizations",
+"Amazon Cognito",
+], exp:[
+"Correct — IAM Identity Center provides a single place to manage SSO access across multiple AWS accounts and supported business applications.",
+"Wrong — Secrets Manager stores and rotates secrets like database credentials; it doesn't provide SSO.",
+"Wrong — Organizations manages multi-account structure and billing, but SSO access itself is handled by IAM Identity Center.",
+"Wrong — Cognito provides identity and access management for customer-facing applications, not workforce SSO across AWS accounts."
+]},
+{domain:"security", q:"What does \"federated identity\" allow users to do when accessing AWS?", options:[
+"Sign in using existing corporate or third-party credentials (for example, via SAML) without needing a separate IAM user",
+"Automatically become the account root user",
+"Bypass all IAM permissions entirely",
+"Access AWS only through the root user's access keys",
+], exp:[
+"Correct — federation lets users authenticate with an existing identity provider and be granted temporary AWS access without a dedicated IAM user.",
+"Wrong — federation does not grant root user privileges; it grants scoped, temporary access based on assigned permissions.",
+"Wrong — federated users still operate under IAM policies and permission boundaries.",
+"Wrong — the point of federation is to avoid relying on long-term credentials like root access keys."
+]},
+{domain:"security", q:"A company wants to let a trusted partner's AWS account access specific resources in its own account, without sharing long-term credentials. What should it use?", options:[
+"A cross-account IAM role that the partner's account can assume",
+"The company's root user credentials, shared directly with the partner",
+"A single shared IAM user with a password given to the partner",
+"Disabling all security groups on the relevant resources",
+], exp:[
+"Correct — a cross-account role lets a trusted external account assume temporary, scoped permissions without ever handling long-term credentials.",
+"Wrong — sharing root credentials is a major security risk and violates best practice, regardless of trust level.",
+"Wrong — sharing a single IAM user's credentials removes accountability and is not a recommended cross-account access pattern.",
+"Wrong — disabling security groups would open network access broadly and is unrelated to controlled cross-account permissions."
+]},
+{domain:"security", q:"Which IAM feature lets an administrator enforce rules such as minimum length and required rotation for IAM user passwords?", options:[
+"An IAM password policy",
+"An S3 bucket policy",
+"A Service Control Policy (SCP)",
+"AWS Shield configuration",
+], exp:[
+"Correct — an account-wide IAM password policy defines requirements like minimum length, complexity, and rotation for IAM user passwords.",
+"Wrong — a bucket policy controls access to a specific S3 bucket, not account-wide password requirements.",
+"Wrong — SCPs set permission guardrails across accounts in an organization; they don't define password complexity rules.",
+"Wrong — Shield protects against DDoS attacks and has nothing to do with password requirements."
+]},
+{domain:"security", q:"What is the difference between an AWS managed policy and a customer managed policy in IAM?", options:[
+"AWS managed policies are created and maintained by AWS, while customer managed policies are created and maintained by the customer for finer control",
+"AWS managed policies can only deny access, while customer managed policies can only allow access",
+"Customer managed policies apply automatically to every AWS account in the world",
+"There is no functional difference between the two",
+], exp:[
+"Correct — AWS managed policies are convenient, pre-built policies maintained by AWS, while customer managed policies give you precise, self-maintained control.",
+"Wrong — both policy types can contain allow or deny statements; the distinction is about who creates and maintains them, not allow-vs-deny.",
+"Wrong — customer managed policies are scoped to the customer's own account, not applied globally to all AWS accounts.",
+"Wrong — the ownership and maintenance responsibility differs meaningfully between the two types."
+]},
+{domain:"security", q:"Which service aggregates and prioritizes security findings from multiple AWS services, such as GuardDuty and Inspector, into a single dashboard?", options:[
+"AWS Security Hub",
+"AWS Config",
+"AWS CloudTrail",
+"AWS Trusted Advisor",
+], exp:[
+"Correct — Security Hub provides a consolidated view of security findings and compliance status from multiple AWS security services.",
+"Wrong — Config tracks resource configuration compliance over time; it isn't a findings-aggregation dashboard for other security tools.",
+"Wrong — CloudTrail logs API activity; it doesn't aggregate findings from services like GuardDuty and Inspector.",
+"Wrong — Trusted Advisor gives general best-practice checks across categories, but isn't a security-findings aggregator for other security services."
+]},
+{domain:"security", q:"Which service helps continuously audit your AWS usage to simplify assessing risk and compliance with regulations and industry standards?", options:[
+"AWS Audit Manager",
+"AWS Artifact",
+"AWS CloudTrail",
+"AWS IAM Access Analyzer",
+], exp:[
+"Correct — Audit Manager continuously collects evidence to help you assess whether your AWS usage aligns with specific regulations or frameworks.",
+"Wrong — Artifact provides access to AWS's own compliance reports and agreements, rather than auditing your account's usage.",
+"Wrong — CloudTrail logs API activity but doesn't map that activity to compliance frameworks the way Audit Manager does.",
+"Wrong — Access Analyzer identifies resources shared with external entities; it isn't a general compliance-auditing service."
+]},
+{domain:"security", q:"Which service helps analyze and visualize security data to investigate the root cause of a potential security issue after it's been detected?", options:[
+"Amazon Detective",
+"Amazon GuardDuty",
+"Amazon Macie",
+"Amazon Inspector",
+], exp:[
+"Correct — Detective helps analyze, investigate, and visualize security data to quickly identify the root cause of findings.",
+"Wrong — GuardDuty detects threats and generates findings, but investigating the root cause is Detective's specific role.",
+"Wrong — Macie discovers and classifies sensitive data; it doesn't provide investigative visualization of security incidents.",
+"Wrong — Inspector scans for vulnerabilities; it isn't focused on investigating the root cause of a detected security incident."
+]},
+{domain:"security", q:"What is the difference between \"encryption in transit\" and \"encryption at rest\"?", options:[
+"Encryption in transit protects data as it moves across a network, while encryption at rest protects data stored on disk",
+"Encryption in transit is only available for Amazon S3, while encryption at rest is only available for Amazon EC2",
+"Encryption at rest happens only during data transfer between Regions",
+"They are two different names for the exact same protection mechanism",
+], exp:[
+"Correct — data in transit is protected using protocols like TLS while traveling over a network, while data at rest is encrypted where it's stored, such as on EBS or in S3.",
+"Wrong — both encryption types are available across many AWS services, not limited to just S3 or EC2 respectively.",
+"Wrong — encryption at rest protects stored data, regardless of whether a Region-to-Region transfer is happening.",
+"Wrong — they protect data at different stages (moving versus stored) and often use different mechanisms."
+]},
+{domain:"security", q:"A healthcare company needs to confirm that AWS services meet regulatory requirements like HIPAA before storing patient data. Where should it look first?", options:[
+"AWS Artifact and AWS's published compliance program documentation",
+"The Amazon EC2 console",
+"AWS Budgets",
+"The AWS Snowball order history",
+], exp:[
+"Correct — AWS Artifact provides on-demand access to AWS's compliance reports, including those relevant to healthcare and other regulated industries.",
+"Wrong — the EC2 console manages compute instances; it has no compliance documentation features.",
+"Wrong — Budgets is a cost management tool, unrelated to compliance certification lookup.",
+"Wrong — Snowball order history relates to physical data transfer devices, not compliance documentation."
+]},
+{domain:"security", q:"Where can customers find and deploy pre-configured third-party security software, such as firewalls or antivirus tools, for use on AWS?", options:[
+"AWS Marketplace",
+"AWS Artifact",
+"AWS re:Post",
+"AWS IQ",
+], exp:[
+"Correct — AWS Marketplace is a digital catalog where customers can find, buy, and deploy third-party software, including security products, that runs on AWS.",
+"Wrong — Artifact provides AWS's own compliance documents, not a catalog of third-party software.",
+"Wrong — re:Post is a community-driven Q&A knowledge resource, not a software marketplace.",
+"Wrong — AWS IQ connects customers with independent AWS experts for on-demand project work, not a software catalog."
+]},
+{domain:"security", q:"Besides cost optimization, which of the following categories does AWS Trusted Advisor also provide checks for?", options:[
+"Security, performance, fault tolerance, and service limits",
+"Only compliance certifications like SOC and PCI",
+"Only legal contract terms",
+"Only third-party software licensing",
+], exp:[
+"Correct — Trusted Advisor evaluates your account across five categories: cost optimization, performance, security, fault tolerance, and service limits.",
+"Wrong — compliance certifications are provided via AWS Artifact, not Trusted Advisor's check categories.",
+"Wrong — Trusted Advisor doesn't review legal contract terms; it reviews configuration and usage against best practices.",
+"Wrong — third-party licensing isn't one of Trusted Advisor's check categories."
+]},
+{domain:"security", q:"Compared with Amazon EC2, how does the AWS Shared Responsibility Model shift for AWS Lambda?", options:[
+"AWS takes on more responsibility with Lambda, managing the underlying servers and runtime, while the customer focuses mainly on their code",
+"The customer takes on all infrastructure responsibility with Lambda, identical to a self-managed data center",
+"There is no shared responsibility model for serverless services like Lambda",
+"AWS becomes responsible for the customer's application code and its logic",
+], exp:[
+"Correct — because Lambda is serverless, AWS manages more of the underlying stack, narrowing the customer's responsibility mainly to their code and its configuration.",
+"Wrong — this describes an on-premises model, the opposite of how responsibility shifts with a serverless service.",
+"Wrong — the shared responsibility model still applies to every AWS service, including serverless ones; the split of duties just shifts.",
+"Wrong — AWS never takes responsibility for the logic or correctness of a customer's own application code."
+]},
+{domain:"security", q:"Which service lets you provision, manage, and deploy free public SSL/TLS certificates for use with AWS services like CloudFront and Elastic Load Balancing?", options:[
+"AWS Certificate Manager (ACM)",
+"AWS Key Management Service (AWS KMS)",
+"AWS Secrets Manager",
+"AWS CloudHSM",
+], exp:[
+"Correct — ACM issues and manages SSL/TLS certificates that integrate directly with services such as CloudFront and ELB.",
+"Wrong — KMS manages cryptographic keys for encrypting data, not SSL/TLS website certificates specifically.",
+"Wrong — Secrets Manager stores secrets like database credentials, not public SSL/TLS certificates.",
+"Wrong — CloudHSM provides dedicated hardware security modules for key storage, not free public certificate issuance."
+]},
+{domain:"security", q:"Which service provides dedicated hardware security modules (HSMs) so a customer can manage their own encryption keys to meet strict compliance requirements?", options:[
+"AWS CloudHSM",
+"AWS Key Management Service (AWS KMS)",
+"AWS Certificate Manager",
+"Amazon Cognito",
+], exp:[
+"Correct — CloudHSM gives you access to single-tenant hardware security modules for full control over key storage, useful for strict compliance needs.",
+"Wrong — KMS is a managed, multi-tenant key management service; CloudHSM is the option that provides dedicated single-tenant hardware.",
+"Wrong — Certificate Manager issues and manages certificates, not general-purpose hardware-backed key storage.",
+"Wrong — Cognito manages user identities for applications, unrelated to hardware key storage."
+]},
+{domain:"security", q:"Which service provides sign-up, sign-in, and access control specifically for customer-facing web and mobile applications?", options:[
+"Amazon Cognito",
+"AWS IAM Identity Center",
+"AWS Directory Service",
+"AWS Identity and Access Management (IAM)",
+], exp:[
+"Correct — Cognito is designed to add user sign-up, sign-in, and access control to your own customer-facing applications.",
+"Wrong — IAM Identity Center provides workforce SSO to AWS accounts and business applications, not customer-facing app authentication.",
+"Wrong — Directory Service integrates with Microsoft Active Directory, a different use case than customer-facing app sign-in.",
+"Wrong — IAM manages access to AWS resources and services, not sign-up/sign-in flows for your own external application's end users."
+]},
+{domain:"security", q:"Which service lets you set up and run Microsoft Active Directory in AWS or connect AWS resources to an existing on-premises Active Directory?", options:[
+"AWS Directory Service",
+"Amazon Cognito",
+"AWS IAM Identity Center",
+"AWS Secrets Manager",
+], exp:[
+"Correct — Directory Service provides managed Active Directory options and connects to existing on-premises directories.",
+"Wrong — Cognito focuses on identity for customer-facing applications, not Active Directory integration.",
+"Wrong — IAM Identity Center provides SSO across AWS accounts, which can integrate with directories but isn't the directory service itself.",
+"Wrong — Secrets Manager stores secrets like credentials; it doesn't provide directory services."
+]},
+{domain:"security", q:"Which service lets you centrally configure and manage security rules, such as AWS WAF rules and Shield protections, across multiple accounts in an organization?", options:[
+"AWS Firewall Manager",
+"AWS Network Firewall",
+"AWS Security Hub",
+"AWS Config",
+], exp:[
+"Correct — Firewall Manager centrally manages firewall and protection rules (like WAF and Shield) across accounts in an AWS Organization.",
+"Wrong — Network Firewall is the managed network-layer firewall itself, not the cross-account management layer for WAF/Shield rules.",
+"Wrong — Security Hub aggregates security findings; it doesn't centrally configure firewall rules across accounts.",
+"Wrong — Config tracks resource configuration compliance, not the centralized management of firewall rules."
+]},
+{domain:"security", q:"Which service provides a managed network firewall for filtering traffic at the VPC level, offering more granular control than security groups alone?", options:[
+"AWS Network Firewall",
+"AWS WAF",
+"AWS Shield",
+"AWS Firewall Manager",
+], exp:[
+"Correct — Network Firewall is a managed firewall service that inspects and filters network traffic at the VPC level with fine-grained rules.",
+"Wrong — WAF filters HTTP/HTTPS requests at the web application layer, not general VPC network traffic.",
+"Wrong — Shield protects against DDoS attacks rather than providing general-purpose network traffic filtering rules.",
+"Wrong — Firewall Manager centrally manages firewall policies across accounts, but Network Firewall is the actual firewall being managed."
+]},
+{domain:"security", q:"Which of the following is a task that only the AWS account root user can perform, not a regular IAM user with administrator permissions?", options:[
+"Closing the AWS account",
+"Launching an EC2 instance",
+"Creating an S3 bucket",
+"Creating an IAM policy",
+], exp:[
+"Correct — certain sensitive actions, like closing the account or changing the account's root email, are restricted to the root user.",
+"Wrong — an IAM user with sufficient permissions can launch EC2 instances; this is not root-only.",
+"Wrong — an IAM user with sufficient permissions can create S3 buckets; this is not root-only.",
+"Wrong — an IAM user with sufficient permissions can create IAM policies; this is not restricted to the root user."
+]},
+{domain:"security", q:"Which of these is correctly categorized as a customer responsibility under the AWS Shared Responsibility Model, regardless of which AWS service is used?", options:[
+"Managing and classifying the customer's own data",
+"Physical security of the AWS data centers",
+"Patching the underlying hypervisor",
+"Decommissioning physical storage media at end of life",
+], exp:[
+"Correct — customers are always responsible for their own data and how it is classified and protected, no matter which AWS service they use.",
+"Wrong — physical data center security is part of AWS's responsibility for security \"of\" the cloud.",
+"Wrong — patching the hypervisor is part of AWS's infrastructure responsibility.",
+"Wrong — decommissioning physical media is handled by AWS as part of managing the underlying hardware."
+]},
+{domain:"security", q:"Which AWS WAF feature helps protect a web application from being overwhelmed by an excessive number of requests from a single IP address?", options:[
+"Rate-based rules",
+"Security groups",
+"Numbered Network ACL rules",
+"GuardDuty findings",
+], exp:[
+"Correct — WAF rate-based rules automatically block or throttle requests from IP addresses that exceed a defined request threshold.",
+"Wrong — security groups control which traffic is allowed to reach a resource, but don't provide request-rate throttling.",
+"Wrong — Network ACLs filter traffic by numbered rules at the subnet level; they don't perform application-layer rate limiting.",
+"Wrong — GuardDuty detects and reports threats; it doesn't itself throttle incoming web requests."
+]},
+{domain:"security", q:"Which service lets you securely share specific AWS resources, such as subnets or Transit Gateways, across multiple AWS accounts without duplicating them?", options:[
+"AWS Resource Access Manager (AWS RAM)",
+"AWS Organizations",
+"AWS Identity and Access Management (IAM)",
+"AWS Security Hub",
+], exp:[
+"Correct — AWS RAM lets you share supported resources with other accounts, avoiding the need to duplicate them in each account.",
+"Wrong — Organizations manages account structure and consolidated billing, but resource sharing itself is done through RAM.",
+"Wrong — IAM manages permissions for identities, not the cross-account sharing of specific resources like subnets.",
+"Wrong — Security Hub aggregates security findings; it doesn't manage cross-account resource sharing."
+]},
+
+// ---------------- ADDITIONAL: CLOUD TECHNOLOGY AND SERVICES ----------------
+{domain:"tech", q:"What is the primary purpose of AWS Local Zones?", options:[
+"To extend AWS infrastructure closer to large population and industry centers, for latency-sensitive applications",
+"To completely replace the need for Availability Zones",
+"To provide a physical device for offline bulk data transfer into AWS",
+"To host only IoT devices at the network edge",
+], exp:[
+"Correct — Local Zones place compute and storage closer to specific metro areas to reduce latency for end users in that area.",
+"Wrong — Local Zones supplement, rather than replace, the standard Availability Zone model within a Region.",
+"Wrong — that describes AWS Snowball, a completely different offering for offline data transfer.",
+"Wrong — Local Zones support general compute and storage workloads, not exclusively IoT devices."
+]},
+{domain:"tech", q:"Which AWS offering embeds AWS compute and storage within telecommunications providers' 5G networks to enable ultra-low-latency applications for mobile devices?", options:[
+"AWS Wavelength",
+"AWS Local Zones",
+"AWS Outposts",
+"AWS Global Accelerator",
+], exp:[
+"Correct — Wavelength Zones are embedded within telecom providers' 5G networks specifically to minimize latency for mobile-connected applications.",
+"Wrong — Local Zones bring AWS infrastructure closer to metro areas generally, not specifically embedded within 5G telecom networks.",
+"Wrong — Outposts brings AWS infrastructure into a customer's own on-premises data center, not into telecom 5G networks.",
+"Wrong — Global Accelerator optimizes routing over the AWS global network; it doesn't embed infrastructure inside telecom networks."
+]},
+{domain:"tech", q:"Which service extends AWS infrastructure and select AWS services to run on-premises, inside a customer's own data center?", options:[
+"AWS Outposts",
+"AWS Local Zones",
+"AWS Wavelength",
+"AWS Direct Connect",
+], exp:[
+"Correct — Outposts delivers AWS-managed hardware and services directly to a customer's on-premises facility.",
+"Wrong — Local Zones extend AWS infrastructure into specific metro areas, but remain part of AWS-operated facilities, not the customer's own data center.",
+"Wrong — Wavelength embeds AWS infrastructure into telecom 5G networks, not a customer's own data center.",
+"Wrong — Direct Connect provides a dedicated network link to AWS; it doesn't place AWS hardware on-premises."
+]},
+{domain:"tech", q:"Which service improves the availability and performance of applications by routing user traffic through the AWS global network to the optimal endpoint?", options:[
+"AWS Global Accelerator",
+"Amazon CloudFront",
+"Amazon Route 53",
+"AWS Direct Connect",
+], exp:[
+"Correct — Global Accelerator uses the AWS global network to route traffic to the healthiest, closest application endpoint, improving performance and availability.",
+"Wrong — CloudFront is a CDN focused on caching and delivering static and dynamic content, a different mechanism than network-layer routing optimization.",
+"Wrong — Route 53 performs DNS resolution and routing at the DNS level, not the same network-layer acceleration Global Accelerator provides.",
+"Wrong — Direct Connect provides a dedicated link from on-premises to AWS; it doesn't optimize routing for end-user application traffic globally."
+]},
+{domain:"tech", q:"A workload requires very high, sustained CPU performance for batch processing tasks. Which EC2 instance family would be most appropriate?", options:[
+"Compute optimized instances",
+"Storage optimized instances",
+"Memory optimized instances",
+"Burstable general purpose (T-family) instances",
+], exp:[
+"Correct — compute optimized instances are built for CPU-intensive workloads like batch processing and high-performance computing.",
+"Wrong — storage optimized instances are designed for high, sequential disk I/O, not primarily raw CPU performance.",
+"Wrong — memory optimized instances are designed for workloads that process large in-memory datasets, not primarily CPU-bound batch jobs.",
+"Wrong — burstable instances are designed for workloads with occasional CPU spikes, not workloads needing sustained high CPU performance."
+]},
+{domain:"tech", q:"Which EC2 instance family is designed for workloads that require high, sequential read/write access to large local datasets, such as distributed file systems?", options:[
+"Storage optimized instances",
+"Compute optimized instances",
+"Memory optimized instances",
+"General purpose instances",
+], exp:[
+"Correct — storage optimized instances provide high, sequential I/O performance for large local datasets.",
+"Wrong — compute optimized instances prioritize CPU performance rather than high-throughput local storage I/O.",
+"Wrong — memory optimized instances prioritize large amounts of RAM rather than high-throughput local disk I/O.",
+"Wrong — general purpose instances balance compute, memory, and networking but aren't optimized specifically for high-throughput storage I/O."
+]},
+{domain:"tech", q:"Which service helps migrate databases to AWS quickly and securely, keeping the source database fully operational throughout the migration?", options:[
+"AWS Database Migration Service (AWS DMS)",
+"AWS Schema Conversion Tool (AWS SCT)",
+"AWS Snowball",
+"AWS Storage Gateway",
+], exp:[
+"Correct — AWS DMS replicates data from the source to the target database while the source remains available and operational.",
+"Wrong — SCT converts database schemas between different engines; it doesn't perform the ongoing data replication itself.",
+"Wrong — Snowball is used for offline bulk data transfer, not live database replication.",
+"Wrong — Storage Gateway connects on-premises applications to AWS storage; it isn't a database migration tool."
+]},
+{domain:"tech", q:"Which tool helps convert a database's schema from one engine to a different engine (for example, Oracle to Amazon Aurora PostgreSQL) before migration?", options:[
+"AWS Schema Conversion Tool (AWS SCT)",
+"AWS Database Migration Service (AWS DMS)",
+"AWS Glue",
+"AWS Migration Hub",
+], exp:[
+"Correct — SCT automatically converts source database schemas and code to be compatible with a different target database engine.",
+"Wrong — DMS handles the ongoing data replication and migration itself, typically after schema conversion has been done.",
+"Wrong — Glue is a data integration and ETL service for analytics pipelines, not database schema conversion.",
+"Wrong — Migration Hub tracks the status of migrations across tools; it doesn't perform schema conversion itself."
+]},
+{domain:"tech", q:"Which service provides a fully managed, in-memory data store commonly used to cache frequently accessed data and reduce database load?", options:[
+"Amazon ElastiCache",
+"Amazon DynamoDB",
+"Amazon RDS",
+"Amazon Redshift",
+], exp:[
+"Correct — ElastiCache (supporting Redis or Memcached) is designed specifically as a fast, in-memory caching layer in front of databases.",
+"Wrong — DynamoDB is a persistent NoSQL database, not primarily an in-memory caching layer.",
+"Wrong — RDS is a managed relational database service, not an in-memory cache.",
+"Wrong — Redshift is a data warehouse for analytics, not an in-memory caching service."
+]},
+{domain:"tech", q:"Which service offers a fully managed, Redis-compatible, durable in-memory database designed to serve as a primary database rather than just a cache?", options:[
+"Amazon MemoryDB for Redis",
+"Amazon ElastiCache",
+"Amazon DynamoDB Accelerator (DAX)",
+"Amazon Aurora",
+], exp:[
+"Correct — MemoryDB is built to be durable enough to act as a primary, Redis-compatible database, unlike a typical cache.",
+"Wrong — ElastiCache is generally used as a caching layer in front of a separate primary database, not as the primary database itself.",
+"Wrong — DAX is an in-memory cache specifically for DynamoDB, not a standalone Redis-compatible primary database.",
+"Wrong — Aurora is a relational database compatible with MySQL/PostgreSQL, not an in-memory Redis-compatible store."
+]},
+{domain:"tech", q:"Which storage option provides temporary block-level storage physically attached to the host computer, which is lost when the instance stops or terminates?", options:[
+"EC2 instance store",
+"Amazon EBS",
+"Amazon S3",
+"Amazon EFS",
+], exp:[
+"Correct — instance store provides temporary, high-performance storage tied to the instance's underlying host, and its data does not persist beyond the instance's life in most cases.",
+"Wrong — EBS volumes persist independently of the instance lifecycle (depending on configuration), unlike instance store.",
+"Wrong — S3 is durable, persistent object storage, unrelated to a single instance's physical host.",
+"Wrong — EFS is a persistent, shared file system, not ephemeral storage tied to one host."
+]},
+{domain:"tech", q:"Which service provides fully managed file storage built on popular file systems such as Windows File Server or Lustre?", options:[
+"Amazon FSx",
+"Amazon EFS",
+"Amazon EBS",
+"Amazon S3",
+], exp:[
+"Correct — FSx offers managed file systems including FSx for Windows File Server and FSx for Lustre, among others.",
+"Wrong — EFS provides a managed Linux-based NFS file system, not Windows File Server or Lustre compatibility.",
+"Wrong — EBS is block storage attached to a single EC2 instance, not a managed shared file system.",
+"Wrong — S3 is object storage accessed via API calls, not a mountable Windows or Lustre file system."
+]},
+{domain:"tech", q:"What is the purpose of an Amazon S3 lifecycle policy?", options:[
+"To automatically transition objects between storage classes or expire/delete them after a defined period, optimizing storage cost",
+"To automatically encrypt every object as soon as it's uploaded",
+"To replicate every object to a different AWS Region",
+"To grant public read access to objects after 30 days",
+], exp:[
+"Correct — lifecycle policies automate moving objects to cheaper storage classes or deleting them over time based on rules you define.",
+"Wrong — encryption is configured separately (for example, via default bucket encryption or KMS), not through lifecycle rules.",
+"Wrong — cross-Region replication is a separate S3 feature, distinct from lifecycle policies.",
+"Wrong — lifecycle policies manage storage class transitions and expiration, not public access permissions."
+]},
+{domain:"tech", q:"Which service centralizes and automates data backup across multiple AWS services, such as EBS, RDS, and DynamoDB, from a single console?", options:[
+"AWS Backup",
+"AWS Storage Gateway",
+"Amazon S3 Glacier",
+"AWS Snowball",
+], exp:[
+"Correct — AWS Backup lets you define backup policies once and apply them centrally across many supported AWS services.",
+"Wrong — Storage Gateway connects on-premises environments to AWS storage; it isn't a cross-service backup management console.",
+"Wrong — S3 Glacier is a low-cost archival storage class, not a backup orchestration service.",
+"Wrong — Snowball is used for physical bulk data transfer, not ongoing centralized backup management."
+]},
+{domain:"tech", q:"Which service lets you run SQL queries directly against data stored in Amazon S3 without provisioning or managing any servers?", options:[
+"Amazon Athena",
+"Amazon Redshift",
+"Amazon EMR",
+"AWS Glue",
+], exp:[
+"Correct — Athena is a serverless interactive query service that lets you query data in S3 using standard SQL.",
+"Wrong — Redshift is a provisioned (or serverless-configured) data warehouse cluster, a heavier-weight solution than Athena's serverless queries.",
+"Wrong — EMR runs big data frameworks like Spark or Hadoop on managed clusters, requiring more setup than Athena.",
+"Wrong — Glue focuses on data cataloging and ETL jobs, not ad hoc SQL querying of S3 data."
+]},
+{domain:"tech", q:"Which service is designed to collect, process, and analyze real-time streaming data, such as clickstreams or IoT telemetry?", options:[
+"Amazon Kinesis",
+"Amazon Athena",
+"Amazon QuickSight",
+"Amazon Redshift",
+], exp:[
+"Correct — Kinesis is purpose-built for ingesting and processing real-time streaming data at scale.",
+"Wrong — Athena queries data already stored in S3; it isn't designed for ingesting real-time streams.",
+"Wrong — QuickSight is a business intelligence visualization tool, not a stream ingestion service.",
+"Wrong — Redshift is a data warehouse for batch analytical queries, not primarily a real-time stream ingestion service."
+]},
+{domain:"tech", q:"Which service is a serverless data integration service used to discover, prepare, and combine data for analytics through extract, transform, and load (ETL) jobs?", options:[
+"AWS Glue",
+"Amazon Athena",
+"Amazon Kinesis",
+"Amazon EMR",
+], exp:[
+"Correct — Glue provides serverless ETL capabilities along with a data catalog to prepare data for analytics.",
+"Wrong — Athena queries already-prepared data in S3; it isn't focused on the ETL process itself.",
+"Wrong — Kinesis focuses on real-time data streaming, not batch ETL data preparation.",
+"Wrong — EMR runs big data processing frameworks on managed clusters, a heavier-weight alternative to Glue's serverless ETL jobs."
+]},
+{domain:"tech", q:"Which service provides business intelligence dashboards and visualizations that let teams explore and share data insights?", options:[
+"Amazon QuickSight",
+"Amazon Athena",
+"AWS Glue",
+"Amazon Redshift",
+], exp:[
+"Correct — QuickSight is AWS's business intelligence service for building interactive dashboards and visualizations.",
+"Wrong — Athena is a query engine for S3 data; it doesn't provide dashboarding and visualization features itself.",
+"Wrong — Glue is used for data preparation and ETL, not for building end-user dashboards.",
+"Wrong — Redshift stores and queries data at scale, but dashboarding and visualization is handled by a tool like QuickSight."
+]},
+{domain:"tech", q:"Which service makes it easy to run big data frameworks such as Apache Spark and Hadoop on a managed cluster to process large datasets?", options:[
+"Amazon EMR",
+"AWS Glue",
+"Amazon Athena",
+"Amazon Kinesis",
+], exp:[
+"Correct — EMR provisions and manages clusters running big data frameworks like Spark and Hadoop.",
+"Wrong — Glue provides serverless ETL jobs and a data catalog, a lighter-weight approach than managing Spark/Hadoop clusters directly.",
+"Wrong — Athena is a serverless query engine for S3 data, not a managed big-data cluster service.",
+"Wrong — Kinesis is focused on real-time streaming ingestion, not managed Spark/Hadoop cluster processing."
+]},
+{domain:"tech", q:"Which service is used to build conversational interfaces, such as chatbots, using voice and text, powered by the same technology behind Alexa?", options:[
+"Amazon Lex",
+"Amazon Polly",
+"Amazon Comprehend",
+"Amazon Connect",
+], exp:[
+"Correct — Lex provides the natural language understanding and conversational engine used to build chatbots and voice interfaces.",
+"Wrong — Polly converts text into spoken audio; it doesn't provide conversational understanding on its own.",
+"Wrong — Comprehend analyzes text for insights like sentiment; it isn't designed to build interactive conversational bots.",
+"Wrong — Connect is a cloud contact center service; it can integrate with Lex bots but isn't itself the conversational AI engine."
+]},
+{domain:"tech", q:"Which service uses natural language processing (NLP) to find insights such as sentiment and key phrases within text?", options:[
+"Amazon Comprehend",
+"Amazon Lex",
+"Amazon Polly",
+"Amazon Translate",
+], exp:[
+"Correct — Comprehend analyzes text to extract entities, key phrases, sentiment, and language, among other insights.",
+"Wrong — Lex is used to build conversational chatbot interfaces, not primarily to analyze arbitrary text for sentiment.",
+"Wrong — Polly converts text into spoken audio; it doesn't analyze text for sentiment or key phrases.",
+"Wrong — Translate converts text between languages; it doesn't perform sentiment or key-phrase analysis."
+]},
+{domain:"tech", q:"Which AWS service converts written text into lifelike spoken audio?", options:[
+"Amazon Polly",
+"Amazon Transcribe",
+"Amazon Translate",
+"Amazon Textract",
+], exp:[
+"Correct — Polly performs text-to-speech, turning text into natural-sounding audio.",
+"Wrong — Transcribe does the opposite: it converts speech (audio) into text.",
+"Wrong — Translate converts text from one language to another; it doesn't produce spoken audio.",
+"Wrong — Textract extracts text and data from scanned documents; it doesn't generate speech."
+]},
+{domain:"tech", q:"Which service automatically extracts text, handwriting, and structured data such as tables and forms from scanned documents?", options:[
+"Amazon Textract",
+"Amazon Comprehend",
+"Amazon Rekognition",
+"Amazon Kendra",
+], exp:[
+"Correct — Textract is purpose-built to pull text and structured data like tables and forms out of scanned documents.",
+"Wrong — Comprehend analyzes text that has already been extracted, rather than pulling text out of document images itself.",
+"Wrong — Rekognition analyzes images and video for objects, faces, and scenes, not structured document data extraction.",
+"Wrong — Kendra provides intelligent search across documents, but doesn't specialize in extracting structured data like tables and forms."
+]},
+{domain:"tech", q:"Which service provides intelligent enterprise search powered by machine learning, letting users ask natural-language questions across internal documents?", options:[
+"Amazon Kendra",
+"Amazon Athena",
+"Amazon Comprehend",
+"Amazon OpenSearch Service",
+], exp:[
+"Correct — Kendra is designed for natural-language enterprise search across internal content repositories.",
+"Wrong — Athena is a SQL query engine for structured data in S3, not a natural-language document search service.",
+"Wrong — Comprehend extracts insights like sentiment from text, but doesn't provide a natural-language search experience.",
+"Wrong — OpenSearch Service provides general search and analytics infrastructure, but Kendra is the ML-powered natural-language enterprise search offering."
+]},
+{domain:"tech", q:"Which service is a serverless event bus that connects data from your own applications, SaaS applications, and AWS services using rule-based routing?", options:[
+"Amazon EventBridge",
+"Amazon SQS",
+"Amazon SNS",
+"AWS Step Functions",
+], exp:[
+"Correct — EventBridge routes events between sources like custom apps, SaaS providers, and AWS services based on rules you define.",
+"Wrong — SQS is a message queue for decoupling components, not an event-routing bus with rule-based matching across many sources.",
+"Wrong — SNS is a pub/sub notification service; it lacks EventBridge's rich, rule-based routing across many event sources.",
+"Wrong — Step Functions orchestrates workflows as state machines, rather than acting as a general-purpose event bus."
+]},
+{domain:"tech", q:"Which service lets you coordinate multiple AWS services into serverless workflows using visual state machines?", options:[
+"AWS Step Functions",
+"Amazon EventBridge",
+"Amazon SQS",
+"Amazon SNS",
+], exp:[
+"Correct — Step Functions lets you design multi-step workflows as state machines that coordinate calls to other AWS services.",
+"Wrong — EventBridge routes individual events between sources and targets, rather than orchestrating a defined multi-step workflow.",
+"Wrong — SQS is a message queue for decoupling components, not a workflow orchestration tool.",
+"Wrong — SNS delivers notifications to subscribers; it doesn't orchestrate multi-step workflows."
+]},
+{domain:"tech", q:"Which service provides an omnichannel cloud contact center that companies use to manage customer service calls and chats?", options:[
+"Amazon Connect",
+"Amazon Simple Email Service (Amazon SES)",
+"Amazon Simple Notification Service (Amazon SNS)",
+"AWS IQ",
+], exp:[
+"Correct — Connect is AWS's cloud-based contact center service for managing customer calls, chats, and related workflows.",
+"Wrong — SES is used for sending and receiving email at scale, not for running a contact center.",
+"Wrong — SNS delivers notifications to subscribers; it isn't a contact center platform.",
+"Wrong — AWS IQ connects customers with independent experts for project work, unrelated to contact center operations."
+]},
+{domain:"tech", q:"Which service is used to send and receive high-volume transactional and marketing email from within applications?", options:[
+"Amazon Simple Email Service (Amazon SES)",
+"Amazon Simple Notification Service (Amazon SNS)",
+"Amazon Connect",
+"AWS Amplify",
+], exp:[
+"Correct — SES is purpose-built for sending and receiving email at scale from applications.",
+"Wrong — SNS delivers notifications across channels like SMS, mobile push, and email subscriptions, but isn't focused on transactional/marketing email sending infrastructure the way SES is.",
+"Wrong — Connect is a contact center service for calls and chat, not an email-sending service.",
+"Wrong — Amplify helps build and deploy web and mobile apps; it isn't an email delivery service."
+]},
+{domain:"tech", q:"Which service provides a cloud-based integrated development environment (IDE) that you access through a web browser?", options:[
+"AWS Cloud9",
+"AWS CloudShell",
+"AWS CodeCommit",
+"AWS CodeBuild",
+], exp:[
+"Correct — Cloud9 provides a full browser-based IDE with a code editor, debugger, and terminal.",
+"Wrong — CloudShell provides a browser-based command-line shell, not a full IDE with a code editor and debugger.",
+"Wrong — CodeCommit is a managed source control (Git) service, not an IDE.",
+"Wrong — CodeBuild compiles and tests code as part of a CI/CD pipeline; it isn't an interactive IDE."
+]},
+{domain:"tech", q:"Which service automates the build, test, and deploy phases of your release process as a continuous delivery pipeline?", options:[
+"AWS CodePipeline",
+"AWS CodeCommit",
+"AWS CodeBuild",
+"AWS CodeDeploy",
+], exp:[
+"Correct — CodePipeline orchestrates the end-to-end release process, coordinating source, build, test, and deploy stages.",
+"Wrong — CodeCommit provides source control (Git repositories), a single stage a pipeline might use, not the pipeline orchestration itself.",
+"Wrong — CodeBuild only handles the build/test stage, not the full end-to-end pipeline.",
+"Wrong — CodeDeploy only handles the deployment stage, not the full pipeline covering build and test as well."
+]},
+{domain:"tech", q:"Which service helps developers analyze and debug distributed applications by tracing requests as they travel through multiple services?", options:[
+"AWS X-Ray",
+"Amazon CloudWatch",
+"AWS CloudTrail",
+"AWS Config",
+], exp:[
+"Correct — X-Ray traces requests end-to-end across distributed application components, helping pinpoint performance issues and errors.",
+"Wrong — CloudWatch collects metrics, logs, and alarms broadly, but distributed request tracing specifically is X-Ray's role.",
+"Wrong — CloudTrail logs API calls for auditing, not request-level tracing through an application's components.",
+"Wrong — Config tracks resource configuration changes, unrelated to tracing application requests."
+]},
+{domain:"tech", q:"Which service provides fully managed, persistent virtual desktops in the cloud that end users can access from various devices?", options:[
+"Amazon WorkSpaces",
+"Amazon AppStream 2.0",
+"Amazon Connect",
+"Amazon Lightsail",
+], exp:[
+"Correct — WorkSpaces provisions persistent, personal virtual desktops that users can log into repeatedly, similar to a physical desktop.",
+"Wrong — AppStream 2.0 streams individual applications rather than providing a full persistent desktop per user.",
+"Wrong — Connect is a contact center service, unrelated to virtual desktops.",
+"Wrong — Lightsail provides simplified virtual private servers, not managed end-user virtual desktops."
+]},
+{domain:"tech", q:"Which service streams individual desktop applications to a web browser without provisioning a full virtual desktop for each user?", options:[
+"Amazon AppStream 2.0",
+"Amazon WorkSpaces",
+"Amazon WorkSpaces Web",
+"Amazon Lightsail",
+], exp:[
+"Correct — AppStream 2.0 streams specific applications on demand, rather than a full persistent desktop environment.",
+"Wrong — WorkSpaces provisions a full, persistent virtual desktop per user, a heavier-weight solution than streaming a single app.",
+"Wrong — WorkSpaces Web provides browser-based access to internal web applications, a different use case than streaming general desktop apps.",
+"Wrong — Lightsail provides simple virtual private servers, not application streaming."
+]},
+{domain:"tech", q:"Which service provides tools to help developers quickly build and deploy full-stack web and mobile applications, including frontend hosting and backend integration?", options:[
+"AWS Amplify",
+"AWS AppSync",
+"AWS CodeStar",
+"AWS Device Farm",
+], exp:[
+"Correct — Amplify provides an end-to-end toolchain for building, hosting, and deploying full-stack web and mobile applications.",
+"Wrong — AppSync focuses specifically on managed GraphQL APIs, a narrower piece of the full-stack picture than Amplify.",
+"Wrong — CodeStar helps set up CI/CD projects, but isn't focused specifically on frontend/mobile app development like Amplify.",
+"Wrong — Device Farm is used for testing apps across real devices, not for building or hosting the application itself."
+]},
+{domain:"tech", q:"Which service lets internet-connected devices securely interact with cloud applications and other devices?", options:[
+"AWS IoT Core",
+"AWS IoT Greengrass",
+"Amazon Kinesis",
+"Amazon EventBridge",
+], exp:[
+"Correct — IoT Core provides the secure device connectivity and messaging backbone for IoT applications.",
+"Wrong — IoT Greengrass extends AWS IoT capabilities to run compute and messaging locally on edge devices, a complementary but different role.",
+"Wrong — Kinesis processes streaming data generally, but isn't the device connectivity and management layer IoT Core provides.",
+"Wrong — EventBridge routes events between applications and services; it isn't a device connectivity service for IoT."
+]},
+{domain:"tech", q:"Which of the following is a key component of an Amazon VPC that controls how traffic is routed to and from the internet?", options:[
+"An internet gateway",
+"A security group",
+"A subnet",
+"An IAM role",
+], exp:[
+"Correct — an internet gateway is attached to a VPC to allow communication between resources in the VPC and the internet.",
+"Wrong — a security group is a virtual firewall controlling traffic to individual resources, not the VPC's internet connectivity point.",
+"Wrong — a subnet is a range of IP addresses within a VPC; it doesn't itself provide internet connectivity.",
+"Wrong — an IAM role grants permissions to identities or services; it has no role in routing network traffic."
+]},
+{domain:"tech", q:"Which service lets you create, publish, and manage APIs at scale, acting as a front door for applications to reach backend services such as Lambda?", options:[
+"Amazon API Gateway",
+"AWS AppSync",
+"AWS Global Accelerator",
+"Amazon Route 53",
+], exp:[
+"Correct — API Gateway lets you create and manage RESTful and WebSocket APIs that route requests to backend services like Lambda.",
+"Wrong — AppSync is specifically for managed GraphQL APIs, a more specialized case than API Gateway's general-purpose API management.",
+"Wrong — Global Accelerator optimizes network routing to endpoints; it isn't an API creation and management service.",
+"Wrong — Route 53 handles DNS resolution, not the creation and management of application APIs."
+]},
+
+// ---------------- ADDITIONAL: BILLING, PRICING & SUPPORT ----------------
+{domain:"billing", q:"What distinguishes an EC2 Dedicated Host from a Dedicated Instance?", options:[
+"A Dedicated Host gives you visibility into and control over the specific physical server (useful for per-socket or per-core licensing), while a Dedicated Instance just guarantees dedicated hardware without that visibility",
+"A Dedicated Host is always cheaper than a Dedicated Instance in every scenario",
+"A Dedicated Instance can be shared with other AWS customers, while a Dedicated Host cannot",
+"There is no meaningful difference between the two options",
+], exp:[
+"Correct — Dedicated Hosts provide server-level visibility and control (helpful for certain software licensing models), while Dedicated Instances just ensure dedicated hardware.",
+"Wrong — relative pricing depends on usage patterns and commitment; a Dedicated Host isn't universally cheaper.",
+"Wrong — by definition, both options mean your instances do not share physical hardware with other AWS accounts.",
+"Wrong — the visibility and control over the physical server is a meaningful, real difference between the two options."
+]},
+{domain:"billing", q:"Which EC2 purchasing option reserves compute capacity in a specific Availability Zone for a chosen duration, without requiring a long-term billing commitment?", options:[
+"On-Demand Capacity Reservations",
+"Standard Reserved Instances",
+"Spot Instances",
+"Savings Plans",
+], exp:[
+"Correct — Capacity Reservations let you reserve capacity in an AZ for as long as you need, billed at On-Demand rates without a multi-year commitment.",
+"Wrong — Reserved Instances require a 1- or 3-year term commitment in exchange for a discount.",
+"Wrong — Spot Instances use spare capacity at a discount but offer no capacity guarantee and can be interrupted.",
+"Wrong — Savings Plans provide a usage-based discount tied to a spend commitment, not a specific-AZ capacity guarantee."
+]},
+{domain:"billing", q:"Which of the following describes a flexibility feature of Reserved Instances?", options:[
+"Standard RIs can be sold on the Reserved Instance Marketplace, and Convertible RIs can be exchanged for a different instance type during the term",
+"All Reserved Instances can be canceled at any time with a full refund",
+"Reserved Instances automatically upgrade to the newest instance generation for free",
+"Reserved Instances cannot be modified or exchanged in any way once purchased",
+], exp:[
+"Correct — Standard RIs offer marketplace resale, and Convertible RIs can be exchanged for different instance attributes, giving customers flexibility.",
+"Wrong — Reserved Instances are a commitment; full refunds on cancellation are not a standard feature.",
+"Wrong — moving to a new instance generation typically requires an active exchange (for Convertible RIs) rather than an automatic free upgrade.",
+"Wrong — Convertible RIs specifically allow exchanges, contradicting the claim that RIs can never be modified."
+]},
+{domain:"billing", q:"In AWS Organizations with consolidated billing, how are Reserved Instance discounts typically shared?", options:[
+"RI discounts can be shared across accounts in the organization that have matching, unused instance usage",
+"RI discounts apply only to the single account that purchased them, with no exceptions",
+"RIs cannot be used at all within AWS Organizations",
+"RI discounts must be manually reassigned account-by-account every single day",
+], exp:[
+"Correct — consolidated billing allows RI discounts to automatically apply to matching usage across accounts in the organization.",
+"Wrong — sharing across accounts with matching usage is one of the benefits consolidated billing provides for RIs.",
+"Wrong — RIs are fully supported and commonly used within AWS Organizations.",
+"Wrong — the sharing of RI discounts across matching usage happens automatically, not through manual daily reassignment."
+]},
+{domain:"billing", q:"Which type of AWS data transfer is typically free of charge?", options:[
+"Data transferred INTO AWS from the internet",
+"Data transferred OUT to the internet",
+"Data transferred between AWS Regions",
+"Data transferred between Availability Zones in some configurations",
+], exp:[
+"Correct — data transfer into AWS from the internet is generally free, while outbound data transfer and cross-Region/cross-AZ transfer typically incur charges.",
+"Wrong — outbound data transfer to the internet is one of the more common categories of data transfer charges.",
+"Wrong — transferring data between Regions typically incurs a per-GB charge.",
+"Wrong — depending on the setup, cross-AZ data transfer can also incur charges, unlike inbound-from-internet transfer."
+]},
+{domain:"billing", q:"Which service lets managed service providers and enterprises customize their own internal cost and usage reporting or pricing structures for different business units?", options:[
+"AWS Billing Conductor",
+"AWS Cost Explorer",
+"AWS Budgets",
+"AWS Pricing Calculator",
+], exp:[
+"Correct — Billing Conductor lets organizations create custom billing groups and pricing structures to reflect internal chargeback needs.",
+"Wrong — Cost Explorer visualizes actual AWS spend and usage trends, but doesn't let you build custom internal pricing structures.",
+"Wrong — Budgets sets alerts on spend and usage thresholds, not custom internal pricing configurations.",
+"Wrong — the Pricing Calculator estimates costs before deployment; it doesn't manage internal billing structures after the fact."
+]},
+{domain:"billing", q:"What is the purpose of AWS cost allocation tags?", options:[
+"To label resources with metadata, such as project or department, so costs can be tracked and organized in billing reports",
+"To encrypt billing data so only authorized users can view it",
+"To automatically grant IAM permissions based on resource tags",
+"To enable Reserved Instance discounts on tagged resources only",
+], exp:[
+"Correct — cost allocation tags let you categorize AWS costs (for example, by project, team, or environment) for more granular reporting.",
+"Wrong — tags are not an encryption mechanism; billing data security is handled separately.",
+"Wrong — while tags can be referenced in IAM policy conditions, that's a distinct use case from cost allocation itself.",
+"Wrong — RI discounts apply based on instance attributes and usage matching, not based on whether a resource is tagged."
+]},
+{domain:"billing", q:"Which report provides the most comprehensive, granular set of AWS cost and usage data, often used for detailed analysis or ingestion into BI tools?", options:[
+"AWS Cost and Usage Report (CUR)",
+"AWS Cost Explorer",
+"AWS Budgets",
+"AWS Trusted Advisor",
+], exp:[
+"Correct — the Cost and Usage Report provides the most detailed, line-item level billing data available, ideal for deep analysis.",
+"Wrong — Cost Explorer offers visual summaries and trends, but with less granularity than the full CUR dataset.",
+"Wrong — Budgets is focused on alerting against thresholds, not providing granular historical usage data.",
+"Wrong — Trusted Advisor gives best-practice recommendations, not detailed line-item billing data."
+]},
+{domain:"billing", q:"Which AWS Support plan is included automatically and free with every AWS account, providing access to customer service, documentation, and community support?", options:[
+"Basic Support",
+"Developer Support",
+"Business Support",
+"Enterprise Support",
+], exp:[
+"Correct — Basic Support is free for all AWS accounts and includes access to documentation, whitepapers, and support communities.",
+"Wrong — Developer Support is a paid tier that adds business-hours technical support case access.",
+"Wrong — Business Support is a paid tier with 24/7 technical support and faster response times.",
+"Wrong — Enterprise Support is the highest paid tier, including a Technical Account Manager."
+]},
+{domain:"billing", q:"Which AWS Support plan is intended for customers experimenting or developing on AWS, offering business-hours email access to Cloud Support Associates?", options:[
+"Developer Support",
+"Basic Support",
+"Business Support",
+"Enterprise On-Ramp Support",
+], exp:[
+"Correct — Developer Support is aimed at those building and testing on AWS and provides business-hours technical guidance via email.",
+"Wrong — Basic Support offers no technical support cases at all, only documentation and community resources.",
+"Wrong — Business Support provides 24/7 access via phone, chat, and email, a step up from Developer Support's business-hours email.",
+"Wrong — Enterprise On-Ramp is a higher tier aimed at more advanced, production-focused needs with proactive guidance."
+]},
+{domain:"billing", q:"Which AWS Support plan provides 24/7 access to Cloud Support Engineers via phone, chat, and email, intended for customers running production workloads?", options:[
+"Business Support",
+"Basic Support",
+"Developer Support",
+"Enterprise On-Ramp Support",
+], exp:[
+"Correct — Business Support offers 24/7 technical support with fast response times, suited to production environments.",
+"Wrong — Basic Support offers no technical support cases, only documentation and community access.",
+"Wrong — Developer Support offers only business-hours email support, less than Business Support's 24/7 multichannel access.",
+"Wrong — Enterprise On-Ramp sits above Business Support and adds proactive guidance and a pool of Technical Account Managers."
+]},
+{domain:"billing", q:"Which AWS Support plan is designed as an entry point to proactive guidance for customers who need some, but not all, of the benefits of full Enterprise Support?", options:[
+"Enterprise On-Ramp Support",
+"Basic Support",
+"Developer Support",
+"Business Support",
+], exp:[
+"Correct — Enterprise On-Ramp offers a subset of Enterprise Support's proactive features, suited to customers not yet ready for the full Enterprise tier.",
+"Wrong — Basic Support offers no proactive guidance or paid technical support case access at all.",
+"Wrong — Developer Support offers business-hours email support, well below the proactive guidance level of Enterprise On-Ramp.",
+"Wrong — Business Support offers strong 24/7 support but without the dedicated proactive guidance elements of Enterprise On-Ramp."
+]},
+{domain:"billing", q:"Which tool provides alerts and remediation guidance specifically when AWS operational issues may affect your own resources?", options:[
+"AWS Health Dashboard (and the AWS Health API)",
+"AWS Trusted Advisor",
+"Amazon CloudWatch",
+"The general AWS Service Health Dashboard",
+], exp:[
+"Correct — the AWS Health Dashboard (personal view) and Health API deliver alerts and guidance personalized to the resources in your own account.",
+"Wrong — Trusted Advisor checks your account against best practices; it isn't focused on personalized operational-issue alerts.",
+"Wrong — CloudWatch monitors metrics and logs you configure, rather than alerting specifically on AWS-side operational events affecting your resources.",
+"Wrong — the general Service Health Dashboard shows overall AWS service status, not alerts personalized to your specific account and resources."
+]},
+{domain:"billing", q:"Which AWS team should you contact to report suspected abuse of AWS resources, such as spam or malware originating from an AWS-hosted resource?", options:[
+"The AWS Trust and Safety team",
+"AWS Professional Services",
+"The AWS Partner Network",
+"AWS Support (Basic plan)",
+], exp:[
+"Correct — the AWS Trust and Safety team specifically handles reports of abuse involving AWS-hosted resources.",
+"Wrong — Professional Services provides hands-on consulting for building and migrating solutions, not abuse reporting.",
+"Wrong — the Partner Network manages relationships with AWS technology and consulting partners, not abuse reports.",
+"Wrong — Basic Support does not include technical support cases and is not the designated channel for abuse reports."
+]},
+{domain:"billing", q:"Which of the following is a benefit of becoming an AWS Partner through the AWS Partner Network (APN)?", options:[
+"Access to partner training, certification, events, and volume discounts",
+"Automatic Enterprise Support at no cost for every customer",
+"Unlimited free compute credits with no expiration",
+"Exemption from the AWS Shared Responsibility Model",
+], exp:[
+"Correct — the Partner Network offers benefits like training, certification programs, partner events, and volume-based discounts.",
+"Wrong — Enterprise Support is a separate paid offering; partnership status doesn't grant it automatically to customers for free.",
+"Wrong — AWS does not offer unlimited, non-expiring free compute credits as a partnership benefit.",
+"Wrong — the Shared Responsibility Model applies to every customer and partner deployment; partnership doesn't exempt anyone from it."
+]},
+{domain:"billing", q:"A company needs hands-on expert guidance to help design and implement a complex migration project. Which AWS offering provides this kind of direct technical assistance?", options:[
+"AWS Professional Services",
+"AWS Trusted Advisor",
+"AWS Artifact",
+"AWS Health Dashboard",
+], exp:[
+"Correct — AWS Professional Services provides expert consulting and hands-on assistance for complex projects like migrations.",
+"Wrong — Trusted Advisor offers automated best-practice recommendations, not hands-on human consulting engagements.",
+"Wrong — Artifact provides compliance documentation, unrelated to hands-on project assistance.",
+"Wrong — the Health Dashboard reports on operational issues affecting your account, not consulting or implementation help."
+]},
+
+// ---------------- BATCH 2: CLOUD CONCEPTS ----------------
+{domain:"concepts", q:"A team wants to define and provision AWS infrastructure using version-controlled, repeatable code rather than manually clicking through a console each time. Which approach does this describe?", options:[
+"Infrastructure as code (IaC), such as using AWS CloudFormation",
+"Using the AWS Management Console exclusively for every deployment",
+"Making one-time manual API calls with no saved record of them",
+"Disabling automation so every change requires a human click",
+], exp:[
+"Correct — IaC lets you define infrastructure in version-controlled templates that can be reviewed, repeated, and reproduced consistently.",
+"Wrong — relying solely on manual console clicks is exactly the repetitive, error-prone approach IaC is meant to replace.",
+"Wrong — one-off, unrecorded API calls aren't repeatable or version-controlled, unlike IaC.",
+"Wrong — IaC is about enabling automation, not disabling it."
+]},
+{domain:"concepts", q:"A team needs to make a single, one-off configuration change to a resource for a quick test. Which access method is generally most appropriate for this specific case?", options:[
+"The AWS Management Console, for a quick manual one-time change",
+"Building a full CloudFormation pipeline just for this one change",
+"Writing a custom SDK application solely for this one change",
+"Provisioning a dedicated CI/CD pipeline for this one change",
+], exp:[
+"Correct — for a quick, one-time action, the console's point-and-click interface is usually the fastest, simplest option.",
+"Wrong — building a full IaC pipeline is overkill for a single one-off change and better suited to repeatable processes.",
+"Wrong — writing custom SDK code adds unnecessary overhead for a single manual action.",
+"Wrong — a full CI/CD pipeline is designed for repeatable deployments, not a single ad hoc change."
+]},
+{domain:"concepts", q:"Which of the following is NOT one of AWS's primary options for connecting an on-premises network to AWS?", options:[
+"A physical USB cable connected directly to an EC2 instance",
+"AWS Direct Connect",
+"An AWS Site-to-Site VPN",
+"The public internet",
+], exp:[
+"Correct — this isn't a real AWS connectivity option; EC2 instances are accessed over the network, not via a direct physical USB connection from on-premises.",
+"Wrong — Direct Connect is a real, dedicated network connectivity option between on-premises and AWS.",
+"Wrong — Site-to-Site VPN is a real, encrypted connectivity option over the public internet.",
+"Wrong — the public internet is a legitimate, if less secure and less consistent, way to reach AWS services."
+]},
+{domain:"concepts", q:"Which AWS service helps an organization inventory its on-premises servers and applications to plan a migration before it begins?", options:[
+"AWS Application Discovery Service",
+"AWS Application Migration Service",
+"AWS Database Migration Service (AWS DMS)",
+"AWS Schema Conversion Tool (AWS SCT)",
+], exp:[
+"Correct — Application Discovery Service collects configuration and usage data from on-premises servers to help plan a migration.",
+"Wrong — Application Migration Service performs the actual lift-and-shift migration, not the upfront discovery and inventory step.",
+"Wrong — DMS migrates databases specifically, not general server/application discovery.",
+"Wrong — SCT converts database schemas between engines; it doesn't inventory on-premises servers."
+]},
+{domain:"concepts", q:"Which service automates lift-and-shift migration of physical, virtual, and cloud servers to AWS with minimal downtime?", options:[
+"AWS Application Migration Service (AWS MGN)",
+"AWS Application Discovery Service",
+"AWS Database Migration Service (AWS DMS)",
+"AWS Snowball",
+], exp:[
+"Correct — Application Migration Service (MGN) is AWS's recommended service for automated lift-and-shift server migration.",
+"Wrong — Application Discovery Service inventories servers for planning; it doesn't perform the migration itself.",
+"Wrong — DMS is scoped to database migration, not general server migration.",
+"Wrong — Snowball is a physical device for bulk offline data transfer, not an automated server migration service."
+]},
+{domain:"concepts", q:"Which member of the AWS Snow Family is a small, portable, ruggedized device suited for edge computing and data collection in space-constrained or disconnected environments?", options:[
+"AWS Snowcone",
+"AWS Snowball Edge",
+"AWS Direct Connect",
+"AWS Storage Gateway",
+], exp:[
+"Correct — Snowcone is the smallest, most portable member of the Snow Family, designed for tight spaces and edge use cases.",
+"Wrong — Snowball Edge offers more capacity and compute but is larger and less portable than Snowcone.",
+"Wrong — Direct Connect is a dedicated network link, not a physical edge computing device.",
+"Wrong — Storage Gateway is a software/virtual appliance bridging on-premises storage to AWS, not a portable physical edge device."
+]},
+
+// ---------------- BATCH 2: SECURITY AND COMPLIANCE ----------------
+{domain:"security", q:"Within AWS Organizations, what is the purpose of grouping accounts into Organizational Units (OUs)?", options:[
+"To apply consistent policies, such as SCPs, to multiple accounts at once based on their function or environment",
+"To merge multiple AWS accounts into a single account",
+"To automatically encrypt every resource in every account within the OU",
+"To eliminate the need for IAM policies within member accounts",
+], exp:[
+"Correct — OUs let you organize accounts (for example, by team or environment) so you can apply shared SCPs and governance consistently.",
+"Wrong — OUs group accounts logically; they don't merge separate accounts into one.",
+"Wrong — grouping accounts into an OU doesn't automatically configure encryption on resources within them.",
+"Wrong — IAM policies are still required within each account; SCPs only set the outer permission ceiling."
+]},
+{domain:"security", q:"Compliance requirements can vary between AWS services. Where should you check to confirm whether a specific AWS service is covered by a particular compliance program before using it for a regulated workload?", options:[
+"AWS Artifact and the service-specific compliance scope documentation",
+"Assume every AWS service has identical compliance coverage",
+"Only the AWS Trusted Advisor dashboard",
+"Only the AWS service's pricing page",
+], exp:[
+"Correct — AWS Artifact and AWS's published compliance scope documentation specify which services are covered by which certifications.",
+"Wrong — compliance coverage does vary by service, so this assumption could lead to a serious regulatory gap.",
+"Wrong — Trusted Advisor checks best practices and cost/performance/security basics, not detailed per-service compliance scope.",
+"Wrong — a pricing page describes costs, not compliance certification coverage."
+]},
+
+// ---------------- BATCH 2: CLOUD TECHNOLOGY AND SERVICES ----------------
+{domain:"tech", q:"Which service lets you run hundreds or thousands of batch computing jobs efficiently, automatically provisioning the optimal compute resources based on job requirements?", options:[
+"AWS Batch",
+"AWS Lambda",
+"Amazon EC2 Auto Scaling",
+"AWS Step Functions",
+], exp:[
+"Correct — AWS Batch dynamically provisions the right amount and type of compute for queued batch jobs, without manual cluster management.",
+"Wrong — Lambda is designed for short-duration functions, not necessarily long-running, large-scale batch job processing.",
+"Wrong — EC2 Auto Scaling adjusts general compute capacity but doesn't provide batch job queuing and scheduling itself.",
+"Wrong — Step Functions orchestrates workflow steps; it doesn't provision compute for batch jobs the way AWS Batch does."
+]},
+{domain:"tech", q:"Which service provides a fully managed Docker container registry for storing, managing, and deploying container images?", options:[
+"Amazon Elastic Container Registry (Amazon ECR)",
+"Amazon Elastic Container Service (Amazon ECS)",
+"Amazon Elastic Kubernetes Service (Amazon EKS)",
+"AWS Fargate",
+], exp:[
+"Correct — ECR is a managed registry specifically for storing and distributing container images.",
+"Wrong — ECS runs and orchestrates containers; it doesn't itself store container images.",
+"Wrong — EKS runs Kubernetes-orchestrated containers; it doesn't provide image storage either.",
+"Wrong — Fargate provides serverless compute for running containers, not a registry for storing images."
+]},
+{domain:"tech", q:"Which service is a fully managed graph database well suited for applications like social networking or recommendation engines with highly connected data?", options:[
+"Amazon Neptune",
+"Amazon DynamoDB",
+"Amazon Aurora",
+"Amazon Redshift",
+], exp:[
+"Correct — Neptune is purpose-built as a graph database for efficiently querying highly connected data and relationships.",
+"Wrong — DynamoDB is a key-value/document NoSQL database, not optimized for graph relationship queries.",
+"Wrong — Aurora is a relational database, not designed around graph relationship traversal.",
+"Wrong — Redshift is a data warehouse for analytical queries, not a graph database."
+]},
+{domain:"tech", q:"Which service lets you safely deploy application configuration changes and feature flags separately from your application code, with built-in validation and rollback?", options:[
+"AWS AppConfig",
+"AWS Systems Manager Parameter Store",
+"AWS Secrets Manager",
+"AWS CodeDeploy",
+], exp:[
+"Correct — AppConfig is designed specifically for safely rolling out configuration and feature flag changes, with validation and automatic rollback.",
+"Wrong — Parameter Store holds configuration values, but lacks AppConfig's built-in deployment validation and rollback workflow.",
+"Wrong — Secrets Manager is focused on storing and rotating secrets, not general application configuration deployment.",
+"Wrong — CodeDeploy deploys application code/artifacts, not configuration values and feature flags specifically."
+]},
+{domain:"tech", q:"A developer wants to automate AWS resource management from within a Python application. Which access method should they use?", options:[
+"An AWS SDK (for example, the AWS SDK for Python, also known as Boto3)",
+"The AWS Management Console",
+"AWS CloudShell",
+"An AWS Site-to-Site VPN",
+], exp:[
+"Correct — an AWS SDK lets code directly call AWS APIs from within an application, such as a Python program.",
+"Wrong — the Management Console is a manual, browser-based interface, not something embedded in application code.",
+"Wrong — CloudShell provides an interactive browser-based command-line shell, not an embeddable application library.",
+"Wrong — a Site-to-Site VPN is a network connectivity option, unrelated to programmatic access from application code."
+]},
+{domain:"tech", q:"Which service provides a fully managed artifact repository for storing and sharing software packages and dependencies used in builds?", options:[
+"AWS CodeArtifact",
+"AWS CodeCommit",
+"AWS CodeBuild",
+"Amazon Elastic Container Registry (Amazon ECR)",
+], exp:[
+"Correct — CodeArtifact stores and shares software packages and dependencies (like npm or Maven packages) used during builds.",
+"Wrong — CodeCommit is a managed Git source-code repository, not a package/dependency artifact store.",
+"Wrong — CodeBuild compiles and tests code; it doesn't provide long-term package repository storage.",
+"Wrong — ECR stores container images specifically, not general software packages and build dependencies."
+]},
+{domain:"tech", q:"Which service provides low-cost, browser-based access to internal web applications without needing a full virtual desktop or installed client software?", options:[
+"Amazon WorkSpaces Web",
+"Amazon WorkSpaces",
+"Amazon AppStream 2.0",
+"AWS Amplify",
+], exp:[
+"Correct — WorkSpaces Web is designed specifically for simple, browser-based access to internal web apps, without a full desktop.",
+"Wrong — WorkSpaces provisions a full, persistent virtual desktop, a heavier solution than browser-only web app access.",
+"Wrong — AppStream 2.0 streams full desktop applications, not just lightweight access to internal web apps.",
+"Wrong — Amplify builds and hosts web and mobile apps; it isn't an access/streaming service for existing internal apps."
+]},
+{domain:"tech", q:"Which service lets you test mobile and web applications across a wide range of real physical devices in the cloud?", options:[
+"AWS Device Farm",
+"Amazon AppStream 2.0",
+"AWS Amplify",
+"AWS CodeBuild",
+], exp:[
+"Correct — Device Farm provides access to real physical devices for testing app compatibility and behavior.",
+"Wrong — AppStream 2.0 streams desktop applications to users; it isn't a device-testing service.",
+"Wrong — Amplify helps build and host apps; it doesn't provide a real-device testing lab.",
+"Wrong — CodeBuild compiles and tests code logic, not UI behavior across real physical devices."
+]},
+{domain:"tech", q:"Which service extends AWS IoT capabilities to edge devices, letting them run local compute, messaging, and machine learning inference even with intermittent cloud connectivity?", options:[
+"AWS IoT Greengrass",
+"AWS IoT Core",
+"Amazon Kinesis",
+"AWS Wavelength",
+], exp:[
+"Correct — Greengrass brings AWS IoT capabilities to the edge device itself, allowing local processing during connectivity gaps.",
+"Wrong — IoT Core provides the cloud-side device connectivity and messaging backbone, not local edge compute.",
+"Wrong — Kinesis processes streaming data in the cloud; it isn't an edge-device runtime.",
+"Wrong — Wavelength embeds AWS infrastructure in telecom 5G networks, a different edge concept than on-device IoT compute."
+]},
+{domain:"tech", q:"Which service automatically translates text from one language into another using machine learning?", options:[
+"Amazon Translate",
+"Amazon Comprehend",
+"Amazon Transcribe",
+"Amazon Polly",
+], exp:[
+"Correct — Translate performs neural machine translation between supported languages.",
+"Wrong — Comprehend analyzes text for insights like sentiment and key phrases; it doesn't translate between languages.",
+"Wrong — Transcribe converts speech into text; it doesn't perform language translation.",
+"Wrong — Polly converts text into spoken audio; it doesn't translate between languages."
+]},
+{domain:"tech", q:"Which free tool lets you review your workloads against the AWS Well-Architected Framework's pillars and get tailored improvement recommendations?", options:[
+"AWS Well-Architected Tool",
+"AWS Trusted Advisor",
+"AWS Config",
+"AWS Pricing Calculator",
+], exp:[
+"Correct — the Well-Architected Tool walks you through structured questions per pillar and generates a tailored improvement plan.",
+"Wrong — Trusted Advisor gives broader account-wide best-practice checks, not a structured Well-Architected Framework review.",
+"Wrong — Config tracks resource configuration compliance over time, not an architecture pillar review.",
+"Wrong — the Pricing Calculator estimates costs; it doesn't review architecture against the Well-Architected pillars."
+]},
+{domain:"tech", q:"Which service analyzes historical utilization metrics and recommends optimal AWS resource configurations, such as rightsized EC2 instance types?", options:[
+"AWS Compute Optimizer",
+"AWS Trusted Advisor",
+"Amazon CloudWatch",
+"AWS Budgets",
+], exp:[
+"Correct — Compute Optimizer uses machine learning on historical utilization data to recommend better-fitting resource configurations.",
+"Wrong — Trusted Advisor offers broader best-practice checks, with less detailed rightsizing analysis than Compute Optimizer.",
+"Wrong — CloudWatch collects the underlying utilization metrics but doesn't itself generate rightsizing recommendations.",
+"Wrong — Budgets tracks cost and usage thresholds; it doesn't recommend specific resource configuration changes."
+]},
+{domain:"tech", q:"Which service helps set up and govern a secure, multi-account AWS environment based on best-practice blueprints, building on top of AWS Organizations?", options:[
+"AWS Control Tower",
+"AWS Organizations",
+"AWS Config",
+"AWS Service Catalog",
+], exp:[
+"Correct — Control Tower automates the setup of a well-architected multi-account environment with guardrails, building on Organizations.",
+"Wrong — Organizations provides the underlying multi-account structure and consolidated billing, but Control Tower adds the automated governance layer on top.",
+"Wrong — Config tracks configuration compliance within an account; it doesn't set up multi-account governance itself.",
+"Wrong — Service Catalog manages a catalog of approved products, not overall multi-account environment setup."
+]},
+{domain:"tech", q:"Which service helps track and manage software licenses (such as for Microsoft or Oracle products) across AWS and on-premises environments to avoid non-compliance?", options:[
+"AWS License Manager",
+"AWS Marketplace",
+"AWS Artifact",
+"AWS Systems Manager",
+], exp:[
+"Correct — License Manager centralizes tracking of software licenses and usage rules across your environments.",
+"Wrong — Marketplace is a catalog for finding and purchasing third-party software, not a license usage tracker.",
+"Wrong — Artifact provides AWS's own compliance reports, not customer software license tracking.",
+"Wrong — Systems Manager provides general operational management tools, not specialized license tracking."
+]},
+{domain:"tech", q:"Which service provides a guided way to size, configure, and deploy third-party enterprise applications (such as SAP or Microsoft SQL Server) on AWS without manually designing the underlying architecture?", options:[
+"AWS Launch Wizard",
+"AWS CloudFormation",
+"AWS Service Catalog",
+"AWS Elastic Beanstalk",
+], exp:[
+"Correct — Launch Wizard guides you through sizing and deploying specific enterprise applications with an AWS-recommended architecture.",
+"Wrong — CloudFormation requires you to write your own templates, rather than offering a guided wizard for specific enterprise apps.",
+"Wrong — Service Catalog manages a catalog of already-approved products, rather than guiding brand-new complex deployments.",
+"Wrong — Elastic Beanstalk deploys custom application code, not specific pre-packaged third-party enterprise software."
+]},
+{domain:"tech", q:"Which tool lets you view and manage a custom collection of AWS resources based on tags, across multiple services, from a single place?", options:[
+"AWS Resource Groups and Tag Editor",
+"AWS Config",
+"AWS Organizations",
+"AWS Cost and Usage Report",
+], exp:[
+"Correct — Resource Groups and Tag Editor let you group and manage resources across services based on shared tags.",
+"Wrong — Config tracks configuration history and compliance, not a tag-based cross-service resource grouping view.",
+"Wrong — Organizations manages accounts and billing structure, not resource-level tag grouping within an account.",
+"Wrong — the Cost and Usage Report provides detailed billing data, not a resource management view."
+]},
+{domain:"tech", q:"Which service lets administrators create and manage a catalog of approved, pre-configured IT services that users can self-service deploy within company guidelines?", options:[
+"AWS Service Catalog",
+"AWS Marketplace",
+"AWS Control Tower",
+"AWS License Manager",
+], exp:[
+"Correct — Service Catalog lets organizations curate an internal, governed list of approved products for self-service deployment.",
+"Wrong — Marketplace is a broader public catalog of third-party software for purchase, not an internally governed catalog.",
+"Wrong — Control Tower sets up multi-account governance guardrails, not an application/service catalog itself.",
+"Wrong — License Manager tracks software licenses; it doesn't provide a deployable service catalog."
+]},
+{domain:"tech", q:"Which service provides a unified interface to view operational data and automate tasks across your AWS resources, such as running commands on EC2 instances without needing direct SSH access?", options:[
+"AWS Systems Manager",
+"AWS Config",
+"Amazon CloudWatch",
+"AWS CloudFormation",
+], exp:[
+"Correct — Systems Manager provides capabilities like Session Manager and Run Command to manage instances without direct SSH access.",
+"Wrong — Config tracks configuration state and compliance; it doesn't execute remote commands on instances.",
+"Wrong — CloudWatch focuses on monitoring metrics, logs, and alarms, not remote command execution.",
+"Wrong — CloudFormation provisions infrastructure from templates; it isn't used for ongoing operational command execution."
+]},
+{domain:"tech", q:"Which service provides fully managed support for transferring files into and out of Amazon S3 using protocols like SFTP, FTPS, and FTP?", options:[
+"AWS Transfer Family",
+"AWS Storage Gateway",
+"AWS Database Migration Service (AWS DMS)",
+"Amazon S3 Transfer Acceleration",
+], exp:[
+"Correct — Transfer Family provides managed SFTP, FTPS, and FTP endpoints backed by S3 (or EFS) storage.",
+"Wrong — Storage Gateway connects on-premises applications to AWS storage through a gateway appliance, a different hybrid pattern than managed file-transfer protocol endpoints.",
+"Wrong — DMS migrates databases, not general file transfers over SFTP/FTP.",
+"Wrong — Transfer Acceleration speeds up transfers to S3 over HTTP(S); it doesn't provide SFTP/FTP protocol support."
+]},
+{domain:"tech", q:"Which service helps minimize downtime and data loss by continuously replicating on-premises or cloud servers to AWS for fast failover during a disaster?", options:[
+"AWS Elastic Disaster Recovery",
+"AWS Backup",
+"AWS Database Migration Service (AWS DMS)",
+"AWS Application Migration Service",
+], exp:[
+"Correct — Elastic Disaster Recovery continuously replicates servers so you can fail over quickly with minimal data loss during a disruption.",
+"Wrong — Backup performs periodic backups and restores, not continuous replication for near-real-time failover.",
+"Wrong — DMS replicates databases specifically, not entire servers for disaster recovery failover.",
+"Wrong — Application Migration Service is purposed for one-time migration cutover rather than ongoing disaster-recovery readiness."
+]},
+{domain:"tech", q:"Which service lets you find, subscribe to, and use third-party data sets directly within AWS, without building your own pipeline to acquire external data?", options:[
+"AWS Data Exchange",
+"AWS Glue",
+"Amazon Athena",
+"Amazon QuickSight",
+], exp:[
+"Correct — Data Exchange is a catalog for finding and subscribing to third-party data products for use in your AWS environment.",
+"Wrong — Glue transforms data you already have; it doesn't provide a marketplace for acquiring third-party data sets.",
+"Wrong — Athena queries data you already have in S3; it doesn't source new third-party data sets.",
+"Wrong — QuickSight visualizes existing data; it doesn't provide a marketplace for acquiring external data."
+]},
+{domain:"tech", q:"Which service provides a fully managed service for running Apache Kafka to build real-time streaming data pipelines?", options:[
+"Amazon Managed Streaming for Apache Kafka (Amazon MSK)",
+"Amazon Kinesis",
+"AWS Glue",
+"Amazon EMR",
+], exp:[
+"Correct — Amazon MSK is AWS's managed service specifically for running Apache Kafka.",
+"Wrong — Kinesis is AWS's native streaming service, an alternative to Kafka rather than a managed Kafka offering itself.",
+"Wrong — Glue focuses on batch ETL and data cataloging, not managed Kafka streaming infrastructure.",
+"Wrong — EMR runs big data frameworks like Spark and Hadoop, not specifically managed Kafka brokers."
+]},
+{domain:"tech", q:"Which service provides a managed search and analytics engine commonly used for log analytics, full-text search, and application monitoring dashboards?", options:[
+"Amazon OpenSearch Service",
+"Amazon Athena",
+"Amazon Kendra",
+"AWS Glue",
+], exp:[
+"Correct — OpenSearch Service is widely used for log analytics, full-text search, and building monitoring dashboards.",
+"Wrong — Athena runs SQL queries against data in S3, a different query model than OpenSearch's search and analytics engine.",
+"Wrong — Kendra provides natural-language enterprise document search, not general log analytics infrastructure.",
+"Wrong — Glue focuses on data preparation and ETL, not search and analytics dashboards."
+]},
+{domain:"tech", q:"Which AWS program provides startups with credits, technical support, and training resources to help them build on AWS?", options:[
+"AWS Activate for Startups",
+"AWS Managed Services (AMS)",
+"AWS IQ",
+"AWS Partner Network",
+], exp:[
+"Correct — AWS Activate for Startups offers credits and resources tailored specifically to help startups get building on AWS.",
+"Wrong — AMS provides ongoing infrastructure operations management for customers, not startup credits.",
+"Wrong — AWS IQ connects customers with independent experts for paid project work, not a startup credits program.",
+"Wrong — the Partner Network supports companies that build on or resell AWS, not specifically a startup credits program."
+]},
+{domain:"tech", q:"Which offering provides ongoing infrastructure management, monitoring, and operations on AWS on a customer's behalf, often used by enterprises that want to offload day-to-day operations?", options:[
+"AWS Managed Services (AMS)",
+"AWS Professional Services",
+"AWS Support",
+"AWS Activate for Startups",
+], exp:[
+"Correct — AMS takes on ongoing operational responsibilities like monitoring, patching, and incident management for a customer's AWS environment.",
+"Wrong — Professional Services provides project-based consulting and implementation help, not continuous day-to-day operations.",
+"Wrong — AWS Support provides reactive technical support cases, not full ongoing operational management.",
+"Wrong — Activate for Startups provides credits and resources for startups, unrelated to ongoing operations management."
+]},
+{domain:"tech", q:"Which service connects customers directly with independent, AWS-certified experts for on-demand, paid project work?", options:[
+"AWS IQ",
+"AWS Professional Services",
+"AWS Partner Network",
+"AWS Support",
+], exp:[
+"Correct — AWS IQ is a marketplace connecting customers with independent experts for specific, on-demand project work.",
+"Wrong — Professional Services is AWS's own consulting organization, not a marketplace of independent third-party experts.",
+"Wrong — the Partner Network is a broader ecosystem program for partner companies, not a direct on-demand expert marketplace.",
+"Wrong — AWS Support provides support plans for troubleshooting, not hired project-based work."
+]},
+{domain:"tech", q:"A company wants a quick-to-set-up, encrypted connection between its office and AWS without waiting for a physical network circuit to be provisioned. Which option best fits?", options:[
+"AWS Site-to-Site VPN",
+"AWS Direct Connect",
+"Amazon CloudFront",
+"AWS Snowball",
+], exp:[
+"Correct — Site-to-Site VPN can typically be set up quickly since it runs encrypted over the existing public internet, without new physical circuits.",
+"Wrong — Direct Connect offers more consistent performance but generally takes longer to provision since it requires a physical circuit.",
+"Wrong — CloudFront is a content delivery network, not a site-to-site network connection.",
+"Wrong — Snowball is a physical device for bulk data transfer, unrelated to establishing network connectivity."
+]},
+{domain:"tech", q:"A company wants to extend its on-premises applications with a local cache while ultimately storing data durably in Amazon S3, minimizing changes to existing on-premises workflows. Which service is designed for this hybrid use case?", options:[
+"AWS Storage Gateway",
+"Amazon EFS",
+"AWS Snowball",
+"Amazon FSx",
+], exp:[
+"Correct — Storage Gateway bridges on-premises applications to S3-backed storage, including local caching for frequently accessed data.",
+"Wrong — EFS is a cloud-native file system; it isn't designed as an on-premises caching gateway to S3.",
+"Wrong — Snowball is for one-time bulk data transfer, not an ongoing hybrid storage bridge.",
+"Wrong — FSx provides fully cloud-hosted managed file systems, not an on-premises gateway appliance."
+]},
+
+// ---------------- BATCH 2: BILLING, PRICING & SUPPORT ----------------
+{domain:"billing", q:"Beyond software listings, which of the following capabilities does AWS Marketplace also provide to help organizations manage third-party software use?", options:[
+"Cost management, governance, and entitlement tracking for purchased software",
+"Free unlimited upgrades to AWS Enterprise Support",
+"Automatic compliance certification for every listed application",
+"Guaranteed source code access for all listed products",
+], exp:[
+"Correct — beyond just listing software, AWS Marketplace includes capabilities for tracking spend, governance, and entitlements for what you've purchased.",
+"Wrong — Marketplace purchases don't include a free Enterprise Support upgrade.",
+"Wrong — listing on Marketplace doesn't automatically certify an application's compliance status.",
+"Wrong — Marketplace sells software licenses and usage rights, not source code access."
+]},
+{domain:"billing", q:"How do Compute Savings Plans generally offer more flexibility than EC2 Reserved Instances?", options:[
+"Compute Savings Plans apply automatically to usage across instance families, sizes, and Regions (and even Lambda/Fargate), rather than being tied to one instance type and Region",
+"Compute Savings Plans require no financial commitment at all",
+"Compute Savings Plans can only be used with a single specific EC2 instance type",
+"Compute Savings Plans and Reserved Instances are functionally identical in every way",
+], exp:[
+"Correct — Savings Plans commit to a dollar-per-hour spend and apply flexibly across many compute options, unlike an RI's tighter attribute matching.",
+"Wrong — Savings Plans still require a 1- or 3-year spend commitment, just like Reserved Instances.",
+"Wrong — this describes the narrower matching behavior of a Standard RI, not the flexibility of Savings Plans.",
+"Wrong — the flexibility across instance families, sizes, Regions, and compute types is exactly what distinguishes Savings Plans from RIs."
+]},
+{domain:"billing", q:"What is the difference between an AWS-generated cost allocation tag and a user-defined cost allocation tag?", options:[
+"AWS-generated tags are automatically applied by AWS, while user-defined tags are custom tags you create and apply yourself for cost tracking",
+"AWS-generated tags cost extra money to use, while user-defined tags are free",
+"User-defined tags can only be applied to Amazon S3 buckets",
+"There is no difference; both types behave identically in every report",
+], exp:[
+"Correct — AWS automatically generates certain tags (such as one identifying the creating principal), while you define custom tags yourself for your own cost-tracking needs.",
+"Wrong — tagging itself doesn't carry a direct AWS charge; it's just a metadata mechanism.",
+"Wrong — cost allocation tags can be applied to many taggable resource types, not only S3 buckets.",
+"Wrong — the two tag types have different origins and are managed differently, even though both can appear in cost reports."
+]},
+{domain:"billing", q:"How does data transfer pricing typically differ for traffic that stays within the same Availability Zone compared with traffic that crosses Availability Zones?", options:[
+"Traffic within the same Availability Zone is generally free or cheaper, while traffic between Availability Zones typically incurs a data transfer charge",
+"Traffic within the same Availability Zone always costs more than traffic between Availability Zones",
+"Both types of traffic are always billed at an identical rate",
+"Data transfer is never charged as long as it stays within a single Region",
+], exp:[
+"Correct — same-AZ traffic is generally cheaper (often free within the same AZ using private IPs), while cross-AZ traffic typically adds a per-GB charge.",
+"Wrong — this reverses the typical pricing relationship; same-AZ traffic is usually cheaper, not more expensive.",
+"Wrong — pricing commonly differs between same-AZ and cross-AZ traffic, so a blanket identical rate isn't accurate.",
+"Wrong — cross-AZ traffic within the same Region can still incur a charge, even though it never crosses a Region boundary."
+]},
+{domain:"billing", q:"What does the AWS Pricing Calculator's Total Cost of Ownership (TCO) comparison help a company evaluate?", options:[
+"The estimated cost difference between continuing to run workloads on-premises versus migrating them to AWS",
+"The resale value of a company's used on-premises hardware",
+"The carbon footprint of a specific AWS Region",
+"The number of support tickets a company is likely to file each year",
+], exp:[
+"Correct — a TCO comparison estimates and contrasts on-premises costs against projected AWS costs to support a migration business case.",
+"Wrong — TCO tooling estimates operating costs, not the resale value of old hardware.",
+"Wrong — Region carbon footprint isn't what a cost TCO comparison calculates.",
+"Wrong — TCO comparisons focus on cost, not a prediction of future support ticket volume."
+]},
+{domain:"billing", q:"Which specific role, included with AWS Enterprise Support, provides ongoing, proactive architectural and operational guidance tailored to a customer's environment?", options:[
+"A Technical Account Manager (TAM)",
+"A Solutions Architect assigned permanently and free of charge on every plan",
+"An AWS Partner",
+"A Cloud Support Associate",
+], exp:[
+"Correct — a Technical Account Manager is the dedicated, proactive guidance role included specifically with Enterprise Support.",
+"Wrong — free Solutions Architect assignment isn't a standard feature available on every support plan.",
+"Wrong — an AWS Partner is a separate third-party company, not an AWS Support plan role.",
+"Wrong — a Cloud Support Associate is associated with the Developer plan's support access, not Enterprise's dedicated proactive guidance."
+]}
+];
+
+const DOMAIN_META = {
+  concepts: {label:"Cloud Concepts", weight:24},
+  security: {label:"Security & Compliance", weight:30},
+  tech: {label:"Technology & Services", weight:34},
+  billing: {label:"Billing, Pricing & Support", weight:12}
+};
+
+const STORAGE_KEY = "ccp_drill_stats_v1";
+function loadStats(){
+  let s = {attempts:{}, missed:{}, examHistory:[]};
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) s = Object.assign(s, JSON.parse(raw));
+  }catch(e){}
+  if(!s.attempts) s.attempts = {};
+  if(!s.missed) s.missed = {};
+  if(!s.examHistory) s.examHistory = [];
+  return s;
+}
+function saveStats(s){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }catch(e){}
+}
+let stats = loadStats();
+
+const FULL_SESSION_LEN = 65;
+const QUICK_LEN_OPTIONS = [5, 10, 20, 40];
+let quickLen = 10;
+
+function shuffleArr(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function pickLeastSeen(pool, n){
+  const shuffled = shuffleArr(pool.slice());
+  shuffled.sort((a,b)=>{
+    const seenA = (stats.attempts[a.id]&&stats.attempts[a.id].seen) || 0;
+    const seenB = (stats.attempts[b.id]&&stats.attempts[b.id].seen) || 0;
+    return seenA - seenB;
+  });
+  return shuffled.slice(0, Math.min(n, shuffled.length));
+}
+
+QUESTIONS.forEach((q,i)=>{ q.id = q.domain+"_"+i; });
+
+function shuffledQuestion(q){
+  const idx = shuffleArr([0,1,2,3]);
+  return {
+    id:q.id, domain:q.domain, qtext:q.q,
+    options: idx.map(i=>q.options[i]),
+    exp: idx.map(i=>q.exp[i]),
+    correct: idx.indexOf(0)
+  };
+}
+
+let session = null;
+const mainEl = document.getElementById("main");
+const backBtn = document.getElementById("backBtn");
+const brandLabel = document.getElementById("brandLabel");
+backBtn.addEventListener("click", ()=>renderHome());
+
+function domainPct(domain){
+  const qs = QUESTIONS.filter(q=>q.domain===domain);
+  let correct=0, attempted=0;
+  qs.forEach(q=>{
+    const a = stats.attempts[q.id];
+    if(a){ attempted++; if(a.lastCorrect) correct++; }
+  });
+  if(attempted===0) return 0;
+  return Math.round((correct/attempted)*100);
+}
+
+function overallPct(){
+  let correct=0, attempted=0;
+  QUESTIONS.forEach(q=>{
+    const a = stats.attempts[q.id];
+    if(a){ attempted++; if(a.lastCorrect) correct++; }
+  });
+  if(attempted===0) return 0;
+  return Math.round((correct/attempted)*100);
+}
+
+function renderHome(){
+  session = null;
+  backBtn.style.display = "none";
+  brandLabel.textContent = "CCP DRILL";
+  const missedCount = Object.keys(stats.missed).length;
+  const examAttempts = stats.examHistory || [];
+
+  let examStatsHtml;
+  if(examAttempts.length){
+    const last = examAttempts[0];
+    const best = examAttempts.reduce((m,a)=>Math.max(m,a.pct),0);
+    const dots = examAttempts.slice(0,10).map(a=>`<span class="attemptdot ${a.passed?'dotpass':'dotfail'}" title="${a.pct}%"></span>`).join("");
+    examStatsHtml = `
+      <div class="examstats">
+        <div class="examstatsrow"><span>Last attempt</span><span class="mono ${last.passed?'good':'bad'}">${last.pct}% &middot; ${last.passed?'PASS':'FAIL'}</span></div>
+        <div class="examstatsrow"><span>Best score</span><span class="mono">${best}%</span></div>
+        <div class="examstatsrow"><span>Attempts so far</span><span class="mono">${examAttempts.length}</span></div>
+        <div class="attemptdots">${dots}</div>
+      </div>
+    `;
+  } else {
+    examStatsHtml = `<p>No attempts yet — see how you'd score on exam day.</p>`;
+  }
+
+  mainEl.innerHTML = "";
+  const screen = document.createElement("div");
+  screen.className = "screen";
+
+  screen.innerHTML = `
+    <div>
+      <div class="eyebrow">AWS CLF-C02</div>
+      <h1>Cloud Practitioner Drill</h1>
+      <p>Two ways to practice from a bank of ${QUESTIONS.length} questions: a full exam simulation with a pass/fail verdict, or quick rounds you can start and stop anytime a break gives you a few minutes.</p>
+    </div>
+    <div class="factrow">
+      <div class="fact"><span class="num mono">65</span><span class="lbl">Questions</span></div>
+      <div class="fact"><span class="num mono">90</span><span class="lbl">Minutes</span></div>
+      <div class="fact"><span class="num mono">700</span><span class="lbl">To Pass /1000</span></div>
+    </div>
+
+    <div class="card modecard">
+      <div class="modehead"><h2><span class="modeicon">&#9776;</span>Full Exam</h2></div>
+      <p>${Math.min(FULL_SESSION_LEN, QUESTIONS.length)} questions, no answers revealed until the end — just like the real thing. Finish for a pass/fail score against the 700/1000 bar.</p>
+      <button class="primarybtn" id="startExam">Start full exam &rarr;</button>
+      ${examStatsHtml}
+    </div>
+
+    <div class="card modecard">
+      <div class="modehead"><h2><span class="modeicon">&#9889;</span>Quick Practice</h2></div>
+      <p>Answer one question or twenty — get the explanation right away. Pick a round length, then a topic.</p>
+      <div class="lenlabel">Round length</div>
+      <div class="lenchiprow" id="lenChipRow"></div>
+      <div class="domaingrid" id="domainGrid"></div>
+    </div>
+
+    ${missedCount>0 ? `<button class="ghostbtn" id="reviewMissed">Review ${missedCount} missed question${missedCount===1?"":"s"}</button>` : ``}
+    ${(Object.keys(stats.attempts).length>0) ? `<button class="linkbtn" id="resetProgress">Reset all progress</button>` : ``}
+  `;
+  mainEl.appendChild(screen);
+
+  const lenRow = document.getElementById("lenChipRow");
+  QUICK_LEN_OPTIONS.forEach(n=>{
+    const chip = document.createElement("button");
+    chip.className = "lenchip" + (n===quickLen ? " active" : "");
+    chip.textContent = n;
+    chip.addEventListener("click", ()=>{
+      quickLen = n;
+      lenRow.querySelectorAll(".lenchip").forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
+    });
+    lenRow.appendChild(chip);
+  });
+
+  const grid = document.getElementById("domainGrid");
+  const rows = [{key:"all", label:"Mixed — all domains", count:QUESTIONS.length, sub:"every domain, shuffled"}]
+    .concat(Object.keys(DOMAIN_META).map(d=>({key:d, label:DOMAIN_META[d].label, count:QUESTIONS.filter(q=>q.domain===d).length, sub:DOMAIN_META[d].weight+"% of exam"})));
+  rows.forEach(r=>{
+    const pct = r.key==="all" ? overallPct() : domainPct(r.key);
+    const row = document.createElement("button");
+    row.className = "domainrow";
+    row.innerHTML = `
+      <div class="ring" style="--pct:${pct}" data-pct="${pct}"></div>
+      <div class="domaininfo">
+        <div class="name">${r.label}</div>
+        <div class="meta">${r.count} Qs &middot; ${r.sub}</div>
+      </div>
+      <div class="chev">&rsaquo;</div>
+    `;
+    row.addEventListener("click", ()=>startSession(r.key, {examMode:false, length:quickLen}));
+    grid.appendChild(row);
+  });
+
+  document.getElementById("startExam").addEventListener("click", ()=>startSession("all", {examMode:true, length:FULL_SESSION_LEN}));
+  const rm = document.getElementById("reviewMissed");
+  if(rm) rm.addEventListener("click", ()=>startSession("missed", {examMode:false, length:missedCount}));
+  const rp = document.getElementById("resetProgress");
+  if(rp) rp.addEventListener("click", ()=>{
+    if(confirm("Reset all saved progress, exam history, and missed-question history?")){
+      stats = {attempts:{}, missed:{}, examHistory:[]};
+      saveStats(stats);
+      renderHome();
+    }
+  });
+}
+
+function startSession(mode, opts){
+  opts = opts || {examMode:false, length:FULL_SESSION_LEN};
+  let pool;
+  if(mode==="missed"){
+    pool = shuffleArr(QUESTIONS.filter(q=>stats.missed[q.id]));
+  } else if(mode==="all"){
+    pool = pickLeastSeen(QUESTIONS, opts.length);
+  } else {
+    pool = pickLeastSeen(QUESTIONS.filter(q=>q.domain===mode), opts.length);
+  }
+
+  session = {
+    mode,
+    opts,
+    examMode: !!opts.examMode,
+    order: pool.map(shuffledQuestion),
+    index: 0,
+    score: 0,
+    answered: [],
+    domainTotals: {},
+    domainCorrect: {},
+    pendingIdx: null,
+    locked: false
+  };
+  session.order.forEach(q=>{
+    session.domainTotals[q.domain] = (session.domainTotals[q.domain]||0)+1;
+  });
+
+  backBtn.style.display = "flex";
+  brandLabel.textContent = opts.examMode ? "FULL EXAM" : mode==="missed" ? "REVIEW MISSED" : mode==="all" ? "QUICK PRACTICE" : DOMAIN_META[mode].label.toUpperCase();
+  renderQuestion();
+}
+
+function recordAnswer(q, chosenIdx){
+  const isCorrect = chosenIdx === q.correct;
+  session.answered.push({id:q.id, correct:isCorrect, chosenIdx});
+  if(isCorrect) session.score++;
+  session.domainCorrect[q.domain] = (session.domainCorrect[q.domain]||0) + (isCorrect?1:0);
+
+  stats.attempts[q.id] = stats.attempts[q.id] || {seen:0,correctCount:0};
+  stats.attempts[q.id].seen++;
+  if(isCorrect) stats.attempts[q.id].correctCount++;
+  stats.attempts[q.id].lastCorrect = isCorrect;
+  if(isCorrect) delete stats.missed[q.id];
+  else stats.missed[q.id] = true;
+  saveStats(stats);
+  return isCorrect;
+}
+
+function renderQuestion(){
+  const total = session.order.length;
+  const q = session.order[session.index];
+  const meta = DOMAIN_META[q.domain];
+  session.locked = false;
+  session.pendingIdx = null;
+
+  const screen = document.createElement("div");
+  screen.className = "screen";
+  screen.innerHTML = `
+    <div class="progresswrap">
+      <div class="progressmeta"><span>Question ${session.index+1} / ${total}</span><span>${session.examMode ? "No peeking until the end" : "Score "+session.score+"/"+session.answered.length}</span></div>
+      <div class="progressbar"><div style="width:${((session.index)/total)*100}%"></div></div>
+    </div>
+    <div class="chip">${meta.label}</div>
+    <div class="qtext">${q.qtext}</div>
+    <div class="options" id="optionsWrap"></div>
+    <div class="footerbar" id="footerBar" style="display:none;">
+      <button class="primarybtn" id="nextBtn"></button>
+    </div>
+  `;
+  mainEl.innerHTML = "";
+  mainEl.appendChild(screen);
+
+  const wrap = document.getElementById("optionsWrap");
+  const letters = ["A","B","C","D"];
+  q.options.forEach((opt,i)=>{
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.innerHTML = session.examMode ? `
+      <div class="row">
+        <div class="letter">${letters[i]}</div>
+        <div class="otext">${opt}</div>
+      </div>
+    ` : `
+      <div class="row">
+        <div class="letter">${letters[i]}</div>
+        <div class="otext">${opt}</div>
+      </div>
+      <div class="explain">${q.exp[i]}</div>
+    `;
+    btn.addEventListener("click", ()=> session.examMode ? selectOption(i) : lockAnswer(i));
+    wrap.appendChild(btn);
+  });
+}
+
+function selectOption(idx){
+  session.pendingIdx = idx;
+  const options = document.querySelectorAll("#optionsWrap .option");
+  options.forEach((el,i)=>{ el.classList.toggle("selected", i===idx); });
+
+  const footer = document.getElementById("footerBar");
+  const nextBtn = document.getElementById("nextBtn");
+  const isLast = session.index === session.order.length - 1;
+  nextBtn.textContent = isLast ? "Submit exam →" : "Next question →";
+  footer.style.display = "block";
+  nextBtn.onclick = ()=> examAdvance();
+}
+
+function examAdvance(){
+  const q = session.order[session.index];
+  recordAnswer(q, session.pendingIdx);
+  const isLast = session.index === session.order.length - 1;
+  if(isLast){ renderResults(); }
+  else { session.index++; renderQuestion(); }
+}
+
+function lockAnswer(chosenIdx){
+  if(session.locked) return;
+  session.locked = true;
+  const q = session.order[session.index];
+  const options = document.querySelectorAll("#optionsWrap .option");
+  recordAnswer(q, chosenIdx);
+
+  options.forEach((el,i)=>{
+    el.classList.add("locked");
+    el.style.cursor = "default";
+    if(i===q.correct) el.classList.add("correct");
+    else if(i===chosenIdx) el.classList.add("incorrect");
+  });
+
+  const footer = document.getElementById("footerBar");
+  const nextBtn = document.getElementById("nextBtn");
+  const isLast = session.index === session.order.length - 1;
+  nextBtn.textContent = isLast ? "See results →" : "Next question →";
+  footer.style.display = "block";
+  nextBtn.onclick = ()=>{
+    if(isLast){ renderResults(); }
+    else { session.index++; renderQuestion(); }
+  };
+
+  const optWrap = document.getElementById("optionsWrap");
+  optWrap.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+function renderResults(){
+  backBtn.style.display = "flex";
+  brandLabel.textContent = session.examMode ? "EXAM RESULTS" : "RESULTS";
+  const total = session.order.length;
+  const pct = Math.round((session.score/total)*100);
+  const scaled = Math.round(100 + (pct/100)*900);
+  const passed = pct >= 72;
+
+  if(session.examMode){
+    stats.examHistory = stats.examHistory || [];
+    stats.examHistory.unshift({date:Date.now(), score:session.score, total, pct, passed});
+    stats.examHistory = stats.examHistory.slice(0, 20);
+    saveStats(stats);
+  }
+
+  const screen = document.createElement("div");
+  screen.className = "screen";
+
+  let breakdownHtml = "";
+  Object.keys(session.domainTotals).forEach(d=>{
+    const c = session.domainCorrect[d]||0;
+    const t = session.domainTotals[d];
+    const p = Math.round((c/t)*100);
+    breakdownHtml += `
+      <div class="breakdownrow">
+        <div class="toplbl"><span>${DOMAIN_META[d].label}</span><span class="mono">${c}/${t}</span></div>
+        <div class="track"><div class="fill" style="width:${p}%"></div></div>
+      </div>
+    `;
+  });
+
+  let reviewHtml = "";
+  if(session.examMode){
+    reviewHtml = `<div class="card"><h2>Review your answers</h2><div class="missedlist">` +
+      session.order.map((q,i)=>{
+        const a = session.answered[i];
+        const gotIt = !!(a && a.correct);
+        return `
+          <div class="missedcard">
+            <div class="examreviewtag ${gotIt?'tagcorrect':'tagwrong'}">${gotIt ? "Correct" : "Missed"}</div>
+            <div class="mq">${q.qtext}</div>
+            ${gotIt ? "" : `<div class="mywrong">Your answer: ${q.options[a.chosenIdx]}</div>`}
+            <div class="ma">Correct: ${q.options[q.correct]}</div>
+          </div>
+        `;
+      }).join("") + `</div></div>`;
+  } else {
+    const missedIds = session.answered.filter(a=>!a.correct).map(a=>a.id);
+    const missedQs = session.order.filter(q=>missedIds.includes(q.id));
+    if(missedQs.length){
+      reviewHtml = `<div class="card"><h2>Review what you missed</h2><div class="missedlist">` +
+        missedQs.map(q=>`
+          <div class="missedcard">
+            <div class="mq">${q.qtext}</div>
+            <div class="ma">Correct: ${q.options[q.correct]}</div>
+          </div>
+        `).join("") + `</div></div>`;
+    }
+  }
+
+  const verdictText = session.examMode
+    ? (passed ? "PASS" : "FAIL")
+    : (passed ? "Passing pace" : "Below pass line (700/1000)");
+  const retryLabel = session.examMode ? "Retake full exam" : "Practice again";
+
+  screen.innerHTML = `
+    <div class="scorehero">
+      <div class="eyebrow">${session.examMode ? "Exam complete" : "Session complete"}</div>
+      ${session.examMode ? `<div class="attemptno">Attempt #${stats.examHistory.length}</div>` : ``}
+      <div class="scorebig mono">${pct}%</div>
+      <p style="color:var(--text-dim);">${session.score} of ${total} correct &middot; approx. scaled score ${scaled}/1000</p>
+      <div class="scoreverdict ${passed?'pass':'fail'}">${verdictText}</div>
+    </div>
+    <div class="card" style="gap:14px;">
+      <h2>By domain</h2>
+      ${breakdownHtml}
+    </div>
+    ${reviewHtml}
+    <button class="primarybtn" id="retryBtn">${retryLabel}</button>
+    <button class="ghostbtn" id="homeBtn2">Back to home</button>
+  `;
+  mainEl.innerHTML = "";
+  mainEl.appendChild(screen);
+
+  document.getElementById("retryBtn").addEventListener("click", ()=>startSession(session.mode, session.opts));
+  document.getElementById("homeBtn2").addEventListener("click", ()=>renderHome());
+}
+
+renderHome();
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

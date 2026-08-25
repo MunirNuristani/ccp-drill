@@ -1,0 +1,15 @@
+{
+  "name": "Cloud Practitioner Drill",
+  "short_name": "CCP Drill",
+  "description": "Practice quiz app for the AWS Certified Cloud Practitioner (CLF-C02) exam, with a full exam simulation and quick practice rounds.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#12151b",
+  "theme_color": "#c2660a",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
