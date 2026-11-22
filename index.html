@@ -323,6 +323,7 @@
   ::selection{background:var(--accent-soft);}
   a{color:var(--accent);}
 </style>
+<link rel="stylesheet" href="learn.css">
 </head>
 <body>
 
@@ -334,6 +335,9 @@
   <main id="main"></main>
 </div>
 
+<script src="learn-data.js"></script>
+<script src="learn-cards.js"></script>
+<script src="learn.js"></script>
 <script>
 const QUESTIONS = [
 // ---------------- CLOUD CONCEPTS ----------------
@@ -2678,7 +2682,7 @@ let session = null;
 const mainEl = document.getElementById("main");
 const backBtn = document.getElementById("backBtn");
 const brandLabel = document.getElementById("brandLabel");
-backBtn.addEventListener("click", ()=>renderHome());
+backBtn.addEventListener("click", ()=>(window.backAction||renderHome)());
 
 function domainPct(domain){
   const qs = QUESTIONS.filter(q=>q.domain===domain);
@@ -2703,6 +2707,7 @@ function overallPct(){
 
 function renderHome(){
   session = null;
+  window.backAction = null;
   backBtn.style.display = "none";
   brandLabel.textContent = "CCP DRILL";
   const missedCount = Object.keys(stats.missed).length;
@@ -2733,13 +2738,15 @@ function renderHome(){
     <div>
       <div class="eyebrow">AWS CLF-C02</div>
       <h1>Cloud Practitioner Drill</h1>
-      <p>Two ways to practice from a bank of ${QUESTIONS.length} questions: a full exam simulation with a pass/fail verdict, or quick rounds you can start and stop anytime a break gives you a few minutes.</p>
+      <p>Learn the material with bite-size lessons, then test yourself with ${QUESTIONS.length} questions: a full exam simulation with a pass/fail verdict, or quick rounds you can start and stop anytime.</p>
     </div>
     <div class="factrow">
       <div class="fact"><span class="num mono">65</span><span class="lbl">Questions</span></div>
       <div class="fact"><span class="num mono">90</span><span class="lbl">Minutes</span></div>
       <div class="fact"><span class="num mono">700</span><span class="lbl">To Pass /1000</span></div>
     </div>
+
+    ${window.learnHomeCard ? window.learnHomeCard() : ""}
 
     <div class="card modecard">
       <div class="modehead"><h2><span class="modeicon">&#9776;</span>Full Exam</h2></div>
@@ -2793,6 +2800,7 @@ function renderHome(){
     grid.appendChild(row);
   });
 
+  if(window.bindLearnHome) window.bindLearnHome();
   document.getElementById("startExam").addEventListener("click", ()=>startSession("all", {examMode:true, length:FULL_SESSION_LEN}));
   const rm = document.getElementById("reviewMissed");
   if(rm) rm.addEventListener("click", ()=>startSession("missed", {examMode:false, length:missedCount}));

@@ -1,4 +1,4 @@
-const VERSION = "v1";
+const VERSION = "v2";
 const CORE_CACHE = `ccp-drill-core-${VERSION}`;
 const RUNTIME_CACHE = `ccp-drill-runtime-${VERSION}`;
 
@@ -6,6 +6,10 @@ const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
+  "./learn.css",
+  "./learn.js",
+  "./learn-data.js",
+  "./learn-cards.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
 ];

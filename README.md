@@ -4,6 +4,8 @@ A mobile-first, installable PWA for practicing the AWS Certified Cloud Practitio
 
 ## Modes
 
+- **Learn** — 18 bite-size lessons across all four exam domains (analogies, mnemonics, quick checks), plus scenario flashcards ("which service fits?"). Earn XP, level up, keep a daily streak and collect badges. Content lives in `learn-data.js` / `learn-cards.js`; UI in `learn.js` / `learn.css`.
+
 - **Full Exam** — 65 questions, no answers revealed until you finish, then a pass/fail score against the real 700/1000 bar. Every attempt is saved so you can track progress over time.
 - **Quick Practice** — pick a round length (5/10/20/40) and a topic, get the explanation immediately after each answer. Stop anytime.
 
@@ -24,4 +26,4 @@ Static hosting only — point Vercel (or any static host) at this directory. `ve
 
 ## Tech
 
-Single-file vanilla HTML/CSS/JS app (`index.html`), no framework, no build step. `manifest.json` + `sw.js` make it installable and usable offline once loaded.
+Vanilla HTML/CSS/JS app (`index.html` plus the `learn-*` files), no framework, no build step. `manifest.json` + `sw.js` make it installable and usable offline once loaded.
